@@ -37,7 +37,7 @@
         <Button x:Name="Ok_Btn" Content="OK" HorizontalAlignment="Left" Margin="582,527,0,0" VerticalAlignment="Top" Width="75"/>
         <Button x:Name="Cancel_Btn" Content="Cancel" HorizontalAlignment="Left" Margin="688,527,0,0" VerticalAlignment="Top" Width="75" Click="CancelBtn_Click"/>
         <Button x:Name="Add_Btn" Content="Add" HorizontalAlignment="Left" Margin="582,302,0,0" VerticalAlignment="Top" Width="75" Click="AddBtn_Click"/>
-        <Button x:Name="Reset_Btn" Content="Reset" HorizontalAlignment="Left" Margin="683,302,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="Reset_Btn" Content="Reset" HorizontalAlignment="Left" Margin="683,302,0,0" VerticalAlignment="Top" Width="75" Click="ResetBtn_Click"/>
         <Button x:Name="Remove_Btn" Content="Remove" HorizontalAlignment="Left" Margin="36,494,0,0" VerticalAlignment="Top" Width="75"/>
         <ListView x:Name="Prop_ListView" HorizontalAlignment="Left" Height="228" Margin="487,56,0,0" VerticalAlignment="Top" Width="283">
             <ListView.View>
@@ -55,5 +55,6 @@
         </ListView>
         <Label Content="DISCIPLINE" HorizontalAlignment="Left" Margin="31,225,0,0" VerticalAlignment="Top" FontWeight="Bold" Width="238" HorizontalContentAlignment="Center"/>
         <TextBox HorizontalAlignment="Left" Height="23" Margin="37,260,0,0" TextWrapping="Wrap" Text="INPUT DISCIPLINE MODEL" VerticalAlignment="Top" Width="234" FontSize="11"/>
+
     </Grid>
 </Window>

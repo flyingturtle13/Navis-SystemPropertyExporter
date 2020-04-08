@@ -120,14 +120,14 @@ namespace SystemPropertyExporter
             //string[] disName = item.DisplayName.Split('_', '-', '.', ' ');
 
             foreach (PropertyCategory oPC in item.PropertyCategories)
-            {
+            {   
                 //STORES IN ReturnCategories TO DISPLAY AVAILABLE CATEGORIES IN UserInput FORM IN CatProp_ListView
                 //CurrCategories STORES CATEGORIES AS PropertyCategory (Navis API) TYPE
                 //THIS WILL BE ACCESSED IN STEP 2 (GetCatProperties()) AFTER USER HAS SELECTED WHICH CATEGORY TO ACCESS
                 CurrCategories.Add(oPC);
                 ReturnCategories.Add(new Category
                 {
-                    CatName = oPC.DisplayName 
+                    CatName = oPC.DisplayName
                 });
             }
         }
