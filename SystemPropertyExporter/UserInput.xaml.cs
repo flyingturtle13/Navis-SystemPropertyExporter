@@ -26,7 +26,6 @@ namespace SystemPropertyExporter
             InitializeComponent();
 
             //Makes models loaded in project (Selection Tree) visible to User in Models List View
-            //Models_ListView.SelectedItem = true;
             try
             {
                     Models_ComBox.ItemsSource = GetProperties.modelList;
