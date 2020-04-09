@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SystemPropertyExporter;
+using System.Collections.ObjectModel;
 
 namespace SystemPropertyExporter
 {
@@ -42,35 +43,7 @@ namespace SystemPropertyExporter
             try
             {
                 //Reset Columns in Property Category and Property List View
-                if (CatProp_ListView.SelectedIndex != -1)
-                {
-                    CatProp_ListView.SelectedItems.Clear();
-                }
-                CatProp_ListView.ItemsSource = null;
-                Prop_ListView.ItemsSource = null;
-
                 GetProperties.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "File");
-                CatProp_ListView.ItemsSource = GetProperties.ReturnCategories;
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show("Error! Original Message: " + exception.Message);
-            }
-        }
-        
-        private void CatRB_Checked(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                //Reset Columns in Property Category and Property List View
-                if (CatProp_ListView.SelectedIndex != -1)
-                {
-                    CatProp_ListView.SelectedItems.Clear();
-                }
-                CatProp_ListView.ItemsSource = null;
-                Prop_ListView.ItemsSource = null;
-
-                GetProperties.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "Layer");
                 CatProp_ListView.ItemsSource = GetProperties.ReturnCategories;
             }
             catch (Exception exception)
@@ -79,18 +52,26 @@ namespace SystemPropertyExporter
             }
 }
         
+        private void CatRB_Checked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                //Reset Columns in Property Category and Property List View
+                GetProperties.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "Layer");
+                CatProp_ListView.ItemsSource = GetProperties.ReturnCategories;
+                //hierarchyChange = true;
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show("Error! Original Message: " + exception.Message);
+            }
+        }
+        
         private void ComponentRB_Checked(object sender, RoutedEventArgs e)
         {
             try
             {
                 //Reset Columns in Property Category & Property List View
-                if (CatProp_ListView.SelectedIndex != -1)
-                {
-                    CatProp_ListView.SelectedItems.Clear();
-                }
-                CatProp_ListView.ItemsSource = null;
-                Prop_ListView.ItemsSource = null;
-
                 GetProperties.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "Block");
                 CatProp_ListView.ItemsSource = GetProperties.ReturnCategories;
             }
@@ -103,20 +84,17 @@ namespace SystemPropertyExporter
         private void PropCat_Selection(object sender, SelectionChangedEventArgs e)
         {
             try
-            {
+            {   
                 //check previous selection is not same as current selection
-                //if (CatProp_ListView.SelectedIndex != -1)
-                //{
-                //    CatProp_ListView.SelectedIndex = 0;
-                //}
-
                 GetProperties.ReturnProp.Clear();
-                //Prop_ListView.Items.Clear() ;
-                Prop_ListView.ItemsSource = null;
 
-                var selectedItem = CatProp_ListView.SelectedItem as GetProperties.Category;
-                GetProperties.GetCatProperties(selectedItem.CatName);
-                Prop_ListView.ItemsSource = GetProperties.ReturnProp;
+                //UPDATES AVAILABLE PROPERTIES WHEN CATEGORY SELECTED IN CatProp_ListView
+                var selectedCat = CatProp_ListView.SelectedItem as GetProperties.Category;
+                    if (selectedCat != null)  //INITIATES PROPERTIES RETRIEVEL WHEN CATEGORY SELECTED (CONTAINER NOT EMPTY)
+                    {
+                        GetProperties.GetCatProperties(selectedCat.CatName);
+                        Prop_ListView.ItemsSource = GetProperties.ReturnProp;
+                    }   
             }
             catch (Exception exception)
             {
@@ -127,17 +105,13 @@ namespace SystemPropertyExporter
 
         private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
-            //MessageBox.Show(GetProperties.ReturnCategories.Count.ToString());
-            //GetProperties.ReturnCategories.Clear();
-            //GetProperties.ReturnCategories.RemoveRange(0, GetProperties.ReturnCategories.Count);
-            //MessageBox.Show(GetProperties.ReturnCategories.Count.ToString());
         }
         
         private void ResetBtn_Click(object sender, RoutedEventArgs e)
-        {
-            CatProp_ListView.SelectedItems.Clear();
-            CatProp_ListView.ItemsSource = null;
-            Prop_ListView.ItemsSource = null;
+        {   
+            //CatProp_ListView.Items.Clear();
+            GetProperties.ReturnCategories.Clear();
+            GetProperties.ReturnProp.Clear();
         }
         
         private void CancelBtn_Click(object sender, RoutedEventArgs e)

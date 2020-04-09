@@ -10,6 +10,7 @@ using Autodesk.Navisworks.Api.Clash;
 using Autodesk.Navisworks.Internal.ApiImplementation;
 using Autodesk.Navisworks.Api.Automation;
 using Autodesk.Navisworks.Api.Plugins;
+using System.Collections.ObjectModel;
 
 namespace SystemPropertyExporter
 {
@@ -18,15 +19,53 @@ namespace SystemPropertyExporter
         public static DocumentModels docModel { get; set; }
 
         public static List<string> modelList = new List<string>();
-
-        public static List<Category> ReturnCategories = new List<Category>();
-
+        
         public static List<PropertyCategory> CurrCategories = new List<PropertyCategory>();
 
-        public static List<Property> ReturnProp = new List<Property>();
+        private static ObservableCollection<Property> _returnProp;
+        
+        public static ObservableCollection<Property> ReturnProp
+        {
+            get
+            {
+                if(_returnProp == null)
+                {
+                    _returnProp = new ObservableCollection<Property>();
+                }
+                return _returnProp;
+            }
+            set
+            {
+                _returnProp = value;
+            }
+        }
+
+        private static ObservableCollection<Category> _returnCategories;
+
+        public static ObservableCollection<Category> ReturnCategories
+        {
+            get
+            {
+                if (_returnCategories == null)
+                {
+                    _returnCategories = new ObservableCollection<Category>();
+                }
+                return _returnCategories;
+            }
+            set
+            {
+                _returnCategories = value;
+            }
+        }
+
         public class Category
         {
             public string CatName { get; set; }
+        }
+
+        public class ResetCategory
+        {
+            public string ResetCat { get; set; }
         }
 
         public class Property

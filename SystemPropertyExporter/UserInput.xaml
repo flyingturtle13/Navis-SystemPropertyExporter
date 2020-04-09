@@ -11,11 +11,11 @@
         <Label Content="PROJECT MODELS" HorizontalAlignment="Left" TextBlock.TextAlignment="Center" Margin="27,22,0,0" Width="251" VerticalAlignment="Top" HorizontalContentAlignment="Center" FontWeight="Bold"/>
         <ComboBox x:Name="Models_ComBox" IsEditable ="True" IsReadOnly="True" Text="SELECT MODEL" HorizontalAlignment="Left" Margin="33,57,0,0" Width="242" BorderBrush="Black" Background="White" VerticalAlignment="Top" HorizontalContentAlignment="Center" FontSize="11"/>
         <Label Content="MODEL HIERARCHY SELECTION" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="35,105,0,0" HorizontalContentAlignment="Center" FontWeight="Bold" Width="239"/>
-        <RadioButton x:Name="SystemRB" Content="Overall System" HorizontalAlignment="Left" Margin="37,133,0,0" VerticalAlignment="Top" Checked="SystemRB_Checked"/>
-        <RadioButton x:Name="CatRB" Content="System Category Components" HorizontalAlignment="Left" Margin="37,158,0,0" VerticalAlignment="Top" Checked="CatRB_Checked"/>
-        <RadioButton x:Name="ComponentRB" Content="System Individual Components" HorizontalAlignment="Left" Margin="37,184,0,0" VerticalAlignment="Top" Checked="ComponentRB_Checked"/>
+        <RadioButton x:Name="SystemRB" GroupName="Hierarchy" Content="Overall System" HorizontalAlignment="Left" Margin="37,133,0,0" VerticalAlignment="Top" Checked="SystemRB_Checked"/>
+        <RadioButton x:Name="CatRB" GroupName="Hierarchy" Content="System Category Components" HorizontalAlignment="Left" Margin="37,158,0,0" VerticalAlignment="Top" Checked="CatRB_Checked"/>
+        <RadioButton x:Name="ComponentRB" GroupName="Hierarchy" Content="System Individual Components" HorizontalAlignment="Left" Margin="37,184,0,0" VerticalAlignment="Top" Checked="ComponentRB_Checked"/>
         <Label Content="PROPERTY CATEGORIES" HorizontalAlignment="Left" Margin="306,24,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="149" FontWeight="Bold"/>
-        <ListView x:Name="CatProp_ListView" ItemsSource ="{Binding Path=ReturnCategories}" SelectedItem ="{Binding Path=Cate}" SelectionMode="Extended" HorizontalAlignment="Left" Height="229" Margin="305,58,0,0" VerticalAlignment="Top" Width="150" SelectionChanged="PropCat_Selection">
+        <ListView x:Name="CatProp_ListView" ItemsSource ="{Binding GetProperties.ReturnCategories}" SelectedItem="{Binding IsSelected}" SelectionMode="Extended" HorizontalAlignment="Left" Height="229" Margin="305,58,0,0" VerticalAlignment="Top" Width="150" SelectionChanged="PropCat_Selection">
             <ListView.View>
                 <GridView ColumnHeaderToolTip="AVAILABLE CATEGORIES">
                     <GridViewColumn DisplayMemberBinding=
