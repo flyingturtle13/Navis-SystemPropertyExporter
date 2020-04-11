@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SystemPropertyExporter;
 using System.Collections.ObjectModel;
+using StartMain;
 
 namespace SystemPropertyExporter
 {
@@ -29,37 +30,47 @@ namespace SystemPropertyExporter
             //Makes models loaded in project (Selection Tree) visible to User in Models List View
             try
             {
+                if (Start.firstOpen == true)
+                {
                     Models_ComBox.ItemsSource = GetProperties.modelList;
+                    Start.firstOpen = false;
+                }       
             }
             catch (Exception exception)
             {
                 MessageBox.Show("Error! Original Message: " + exception.Message);
             }
+        }
 
+        private void ModelCB_Select(object sender, SelectionChangedEventArgs e)
+        {
+             if (SystemRB.IsChecked == true && Models_ComBox.SelectedItem != null)
+            {
+                GetProperties.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "File");
+                CatProp_ListView.ItemsSource = GetProperties.ReturnCategories;
+            }
+             else if (CatRB.IsChecked == true && Models_ComBox.SelectedItem != null)
+            {
+                GetProperties.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "Layer");
+                CatProp_ListView.ItemsSource = GetProperties.ReturnCategories;
+            }
+             else if (ComponentRB.IsChecked == true && Models_ComBox.SelectedItem != null)
+            {
+                GetProperties.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "Block");
+                CatProp_ListView.ItemsSource = GetProperties.ReturnCategories;
+            }
         }
 
         private void SystemRB_Checked(object sender, RoutedEventArgs e)
         {
             try
             {
-                //Reset Columns in Property Category and Property List View
-                GetProperties.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "File");
-                CatProp_ListView.ItemsSource = GetProperties.ReturnCategories;
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show("Error! Original Message: " + exception.Message);
-            }
-}
-        
-        private void CatRB_Checked(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                //Reset Columns in Property Category and Property List View
-                GetProperties.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "Layer");
-                CatProp_ListView.ItemsSource = GetProperties.ReturnCategories;
-                //hierarchyChange = true;
+                if (Models_ComBox.SelectedItem != null)
+                {
+                    GetProperties.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "File");
+                    CatProp_ListView.ItemsSource = GetProperties.ReturnCategories;
+                }
+                
             }
             catch (Exception exception)
             {
@@ -67,18 +78,41 @@ namespace SystemPropertyExporter
             }
         }
         
-        private void ComponentRB_Checked(object sender, RoutedEventArgs e)
+        private void CatRB_Checked(object sender, RoutedEventArgs e)
         {
             try
             {
-                //Reset Columns in Property Category & Property List View
-                GetProperties.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "Block");
-                CatProp_ListView.ItemsSource = GetProperties.ReturnCategories;
+                if (Models_ComBox.SelectedItem != null)
+                {
+                    GetProperties.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "Layer");
+                    CatProp_ListView.ItemsSource = GetProperties.ReturnCategories;
+                }
             }
             catch (Exception exception)
             {
                 MessageBox.Show("Error! Original Message: " + exception.Message);
             }
+        }
+
+        private void ComponentRB_Checked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (Models_ComBox.SelectedItem != null)
+                {
+                    GetProperties.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "Block");
+                    CatProp_ListView.ItemsSource = GetProperties.ReturnCategories;
+                }
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show("Error! Original Message: " + exception.Message);
+            }
+        }
+
+        private void Dis_KeyDn(object sender, KeyEventArgs e)
+        {
+
         }
 
         private void PropCat_Selection(object sender, SelectionChangedEventArgs e)
@@ -90,11 +124,11 @@ namespace SystemPropertyExporter
 
                 //UPDATES AVAILABLE PROPERTIES WHEN CATEGORY SELECTED IN CatProp_ListView
                 var selectedCat = CatProp_ListView.SelectedItem as GetProperties.Category;
-                    if (selectedCat != null)  //INITIATES PROPERTIES RETRIEVEL WHEN CATEGORY SELECTED (CONTAINER NOT EMPTY)
-                    {
-                        GetProperties.GetCatProperties(selectedCat.CatName);
-                        Prop_ListView.ItemsSource = GetProperties.ReturnProp;
-                    }   
+                if (selectedCat != null)  //INITIATES PROPERTIES RETRIEVEL WHEN CATEGORY SELECTED (CONTAINER NOT EMPTY)
+                {
+                    GetProperties.GetCatProperties(selectedCat.CatName);
+                    Prop_ListView.ItemsSource = GetProperties.ReturnProp;
+                }   
             }
             catch (Exception exception)
             {
@@ -116,7 +150,18 @@ namespace SystemPropertyExporter
         
         private void CancelBtn_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            try
+            {
+                GetProperties.modelList.Clear();
+                this.Close();
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show("Error! Original Message: " + exception.Message);
+            }
+            
         }
+
+
     }
 }

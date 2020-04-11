@@ -6,10 +6,10 @@
              xmlns:local="clr-namespace:SystemPropertyExporter"
              mc:Ignorable="d" 
              d:DesignHeight="600
-        " d:DesignWidth="800" WindowStartupLocation="CenterScreen" Title="SYSTEM PROPERTIES EXPORTER" Width="800">
+        " d:DesignWidth="800" WindowStartupLocation="CenterScreen" Title="SYSTEM PROPERTIES EXPORTER" Width="800" Topmost="True">
     <Grid Margin="0,0,-0.4,-0.6">
         <Label Content="PROJECT MODELS" HorizontalAlignment="Left" TextBlock.TextAlignment="Center" Margin="27,22,0,0" Width="251" VerticalAlignment="Top" HorizontalContentAlignment="Center" FontWeight="Bold"/>
-        <ComboBox x:Name="Models_ComBox" IsEditable ="True" IsReadOnly="True" Text="SELECT MODEL" HorizontalAlignment="Left" Margin="33,57,0,0" Width="242" BorderBrush="Black" Background="White" VerticalAlignment="Top" HorizontalContentAlignment="Center" FontSize="11"/>
+        <ComboBox x:Name="Models_ComBox" IsEditable ="True" IsReadOnly="True" Text="SELECT MODEL" HorizontalAlignment="Left" Margin="33,57,0,0" Width="242" BorderBrush="Black" Background="White" VerticalAlignment="Top" HorizontalContentAlignment="Center" FontSize="11" SelectionChanged="ModelCB_Select" MaxDropDownHeight="600"/>
         <Label Content="MODEL HIERARCHY SELECTION" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="35,105,0,0" HorizontalContentAlignment="Center" FontWeight="Bold" Width="239"/>
         <RadioButton x:Name="SystemRB" GroupName="Hierarchy" Content="Overall System" HorizontalAlignment="Left" Margin="37,133,0,0" VerticalAlignment="Top" Checked="SystemRB_Checked"/>
         <RadioButton x:Name="CatRB" GroupName="Hierarchy" Content="System Category Components" HorizontalAlignment="Left" Margin="37,158,0,0" VerticalAlignment="Top" Checked="CatRB_Checked"/>
@@ -54,7 +54,7 @@
             </ListView.View>
         </ListView>
         <Label Content="DISCIPLINE" HorizontalAlignment="Left" Margin="31,225,0,0" VerticalAlignment="Top" FontWeight="Bold" Width="238" HorizontalContentAlignment="Center"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="37,260,0,0" TextWrapping="Wrap" Text="INPUT DISCIPLINE MODEL" VerticalAlignment="Top" Width="234" FontSize="11"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="37,260,0,0" TextWrapping="Wrap" Text="INPUT DISCIPLINE MODEL" VerticalAlignment="Top" Width="234" FontSize="11" KeyDown="Dis_KeyDn"/>
 
     </Grid>
 </Window>

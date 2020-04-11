@@ -18,10 +18,26 @@ namespace SystemPropertyExporter
     {
         public static DocumentModels docModel { get; set; }
 
-        public static List<string> modelList = new List<string>();
-        
         public static List<PropertyCategory> CurrCategories = new List<PropertyCategory>();
+        
+        private static ObservableCollection<string> _modelList;
 
+        public static ObservableCollection<string> modelList
+        {
+            get
+            {
+                if (_modelList == null)
+                {
+                    _modelList = new ObservableCollection<string>();
+                }
+                return _modelList;
+            }
+            set
+            {
+                _modelList = value;
+            }
+        }
+        
         private static ObservableCollection<Property> _returnProp;
         
         public static ObservableCollection<Property> ReturnProp
@@ -61,11 +77,6 @@ namespace SystemPropertyExporter
         public class Category
         {
             public string CatName { get; set; }
-        }
-
-        public class ResetCategory
-        {
-            public string ResetCat { get; set; }
         }
 
         public class Property
