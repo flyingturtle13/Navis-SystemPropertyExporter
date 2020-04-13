@@ -112,7 +112,29 @@ namespace SystemPropertyExporter
 
         private void Dis_KeyDn(object sender, KeyEventArgs e)
         {
+            if (Dis_TB.Text == "INPUT DISCIPLINE MODEL")
+            {
+                Dis_TB.Text = "";
+                Dis_TB.Foreground = Brushes.Black;
+            }
+        }
+        
+        private void Dis_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (Dis_TB.Text == "INPUT DISCIPLINE MODEL")
+            {
+                Dis_TB.Text = "";
+                Dis_TB.Foreground = Brushes.Black;
+            }
+        }
 
+        private void Dis_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (Dis_TB.Text == "")
+            {
+                Dis_TB.Text = "INPUT DISCIPLINE MODEL";
+                Dis_TB.Foreground = new SolidColorBrush(Color.FromRgb(169,169,169));
+            }
         }
 
         private void PropCat_Selection(object sender, SelectionChangedEventArgs e)
@@ -146,6 +168,8 @@ namespace SystemPropertyExporter
             //CatProp_ListView.Items.Clear();
             GetProperties.ReturnCategories.Clear();
             GetProperties.ReturnProp.Clear();
+            Dis_TB.Text = "INPUT DISCIPLINE MODEL";
+            Dis_TB.Foreground = new SolidColorBrush(Color.FromRgb(169, 169, 169));
         }
         
         private void CancelBtn_Click(object sender, RoutedEventArgs e)
@@ -162,6 +186,6 @@ namespace SystemPropertyExporter
             
         }
 
-
+        
     }
 }

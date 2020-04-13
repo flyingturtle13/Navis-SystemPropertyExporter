@@ -11,9 +11,9 @@
         <Label Content="PROJECT MODELS" HorizontalAlignment="Left" TextBlock.TextAlignment="Center" Margin="27,22,0,0" Width="251" VerticalAlignment="Top" HorizontalContentAlignment="Center" FontWeight="Bold"/>
         <ComboBox x:Name="Models_ComBox" IsEditable ="True" IsReadOnly="True" Text="SELECT MODEL" HorizontalAlignment="Left" Margin="33,57,0,0" Width="242" BorderBrush="Black" Background="White" VerticalAlignment="Top" HorizontalContentAlignment="Center" FontSize="11" SelectionChanged="ModelCB_Select" MaxDropDownHeight="600"/>
         <Label Content="MODEL HIERARCHY SELECTION" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="35,105,0,0" HorizontalContentAlignment="Center" FontWeight="Bold" Width="239"/>
-        <RadioButton x:Name="SystemRB" GroupName="Hierarchy" Content="Overall System" HorizontalAlignment="Left" Margin="37,133,0,0" VerticalAlignment="Top" Checked="SystemRB_Checked"/>
-        <RadioButton x:Name="CatRB" GroupName="Hierarchy" Content="System Category Components" HorizontalAlignment="Left" Margin="37,158,0,0" VerticalAlignment="Top" Checked="CatRB_Checked"/>
-        <RadioButton x:Name="ComponentRB" GroupName="Hierarchy" Content="System Individual Components" HorizontalAlignment="Left" Margin="37,184,0,0" VerticalAlignment="Top" Checked="ComponentRB_Checked"/>
+        <RadioButton x:Name="SystemRB" GroupName="Hierarchy" Content="1. Discipline System" HorizontalAlignment="Left" Margin="37,133,0,0" VerticalAlignment="Top" Checked="SystemRB_Checked"/>
+        <RadioButton x:Name="CatRB" GroupName="Hierarchy" Content="2. Discipline System Parts" HorizontalAlignment="Left" Margin="37,158,0,0" VerticalAlignment="Top" Checked="CatRB_Checked"/>
+        <RadioButton x:Name="ComponentRB" GroupName="Hierarchy" Content="3. System Individual Components" HorizontalAlignment="Left" Margin="37,184,0,0" VerticalAlignment="Top" Checked="ComponentRB_Checked"/>
         <Label Content="PROPERTY CATEGORIES" HorizontalAlignment="Left" Margin="306,24,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="149" FontWeight="Bold"/>
         <ListView x:Name="CatProp_ListView" ItemsSource ="{Binding GetProperties.ReturnCategories}" SelectedItem="{Binding IsSelected}" SelectionMode="Extended" HorizontalAlignment="Left" Height="229" Margin="305,58,0,0" VerticalAlignment="Top" Width="150" SelectionChanged="PropCat_Selection">
             <ListView.View>
@@ -28,8 +28,16 @@
         <Label Content="SELECTED MODELS &amp; PROPERTIES TO EXPORT" HorizontalAlignment="Left" Margin="30,331,0,0" VerticalAlignment="Top"/>
         <ListView x:Name="ModelsSelected_ListView" HorizontalAlignment="Left" Height="120" Margin="33,363,0,0" VerticalAlignment="Top" Width="726">
             <ListView.View>
-                <GridView>
-                    <GridViewColumn/>
+                <GridView ColumnHeaderToolTip="Selected Discipline Properties for Export">
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Discipline}" Header="DISCIPLINE" Width="150"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=ModFile}" Header="MODEL FILE NAME" Width="175"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=HierLvl}" Width="75">
+                        <GridViewColumn.Header>
+                            <TextBlock TextWrapping="Wrap" Text="HIERARCHY LEVEL" TextAlignment="Center"/>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=HierLvl}" Header="CATEGORY SELECTED" Width="150"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=SelectProp}" Header="PROPERTY SELECTED" Width="150"/>
                 </GridView>
             </ListView.View>
         </ListView>
@@ -54,7 +62,7 @@
             </ListView.View>
         </ListView>
         <Label Content="DISCIPLINE" HorizontalAlignment="Left" Margin="31,225,0,0" VerticalAlignment="Top" FontWeight="Bold" Width="238" HorizontalContentAlignment="Center"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="37,260,0,0" TextWrapping="Wrap" Text="INPUT DISCIPLINE MODEL" VerticalAlignment="Top" Width="234" FontSize="11" KeyDown="Dis_KeyDn"/>
+        <TextBox x:Name="Dis_TB" HorizontalAlignment="Left" Height="23" Margin="37,260,0,0" TextWrapping="Wrap" Text="INPUT DISCIPLINE MODEL" VerticalAlignment="Top" Width="234" FontSize="11" KeyDown="Dis_KeyDn" LostFocus="Dis_LostFocus" Foreground="DarkGray" GotFocus="Dis_GotFocus"/>
 
     </Grid>
 </Window>
