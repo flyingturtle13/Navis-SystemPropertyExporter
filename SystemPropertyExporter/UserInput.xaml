@@ -24,20 +24,33 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Label Content="PROPERTIES" HorizontalAlignment="Left" Margin="491,24,0,0" VerticalAlignment="Top" Width="276" FontWeight="Bold" HorizontalContentAlignment="Center"/>
+        <Label Content="PROPERTIES AVAILABLE" HorizontalAlignment="Left" Margin="491,24,0,0" VerticalAlignment="Top" Width="276" FontWeight="Bold" HorizontalContentAlignment="Center"/>
         <Label Content="SELECTED MODELS &amp; PROPERTIES TO EXPORT" HorizontalAlignment="Left" Margin="30,331,0,0" VerticalAlignment="Top"/>
         <ListView x:Name="ModelsSelected_ListView" HorizontalAlignment="Left" Height="120" Margin="33,363,0,0" VerticalAlignment="Top" Width="726">
             <ListView.View>
                 <GridView ColumnHeaderToolTip="Selected Discipline Properties for Export">
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Discipline}" Header="DISCIPLINE" Width="150"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=ModFile}" Header="MODEL FILE NAME" Width="175"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Discipline}" Header="DISCIPLINE" Width="200">
+                        <!--<GridViewColumn.Header>-->
+                            <!--<GridViewColumnHeader Tag="Discipline" Click="ModelsSelectedLV_ColHead_Click">DISCIPLINE</GridViewColumnHeader>-->
+                        <!--</GridViewColumn.Header>-->
+                    </GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=ModFile}" Header ="MODEL FILE NAME" Width="200">
+                        <!--<GridViewColumn.Header>-->
+                            <!--<GridViewColumnHeader Tag="ModFile" Click="ModelsSelectedLV_ColHead_Click">MODEL FILE NAME</GridViewColumnHeader>-->
+                        <!--</GridViewColumn.Header>-->
+                    </GridViewColumn>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=HierLvl}" Width="75">
                         <GridViewColumn.Header>
-                            <TextBlock TextWrapping="Wrap" Text="HIERARCHY LEVEL" TextAlignment="Center"/>
+                            <!--<GridViewColumnHeader Tag="HierLvl" Click="ModelsSelectedLV_ColHead_Click">-->
+                                <TextBlock TextWrapping="Wrap" Text="HIERARCHY LEVEL" TextAlignment="Center"/>
+                            <!--</GridViewColumnHeader>-->
                         </GridViewColumn.Header>
                     </GridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=HierLvl}" Header="CATEGORY SELECTED" Width="150"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=SelectProp}" Header="PROPERTY SELECTED" Width="150"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=SelectCat}" Header="CATEGORY SELECTED" Width="200">
+                        <!--<GridViewColumn.Header>
+                            <GridViewColumnHeader Tag="ModFile" Click="ModelsSelectedLV_ColHead_Click">CATEGORY SELECTED</GridViewColumnHeader>
+                        </GridViewColumn.Header>-->
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>
@@ -46,7 +59,7 @@
         <Button x:Name="Cancel_Btn" Content="Cancel" HorizontalAlignment="Left" Margin="688,527,0,0" VerticalAlignment="Top" Width="75" Click="CancelBtn_Click"/>
         <Button x:Name="Add_Btn" Content="Add" HorizontalAlignment="Left" Margin="582,302,0,0" VerticalAlignment="Top" Width="75" Click="AddBtn_Click"/>
         <Button x:Name="Reset_Btn" Content="Reset" HorizontalAlignment="Left" Margin="683,302,0,0" VerticalAlignment="Top" Width="75" Click="ResetBtn_Click"/>
-        <Button x:Name="Remove_Btn" Content="Remove" HorizontalAlignment="Left" Margin="36,494,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="Remove_Btn" Content="Remove" HorizontalAlignment="Left" Margin="36,494,0,0" VerticalAlignment="Top" Width="75" Click="RemoveBtn_Click"/>
         <ListView x:Name="Prop_ListView" HorizontalAlignment="Left" Height="228" Margin="487,56,0,0" VerticalAlignment="Top" Width="283">
             <ListView.View>
                 <GridView ColumnHeaderToolTip="AVAILABLE PROPERTIES AND EXAMPLE VALUES">
