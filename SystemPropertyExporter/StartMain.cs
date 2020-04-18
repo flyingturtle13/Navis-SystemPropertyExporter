@@ -25,7 +25,7 @@ namespace StartMain
     [Command("System_Property_Exporter", Icon = "Prop-Export-16.ico", LargeIcon = "Prop-Export-32.ico", ToolTip = "Export MEP System Model Properties to Excel")]
     public class Start : CommandHandlerPlugin
         {
-            public static bool firstOpen { get; set; }
+            public static bool FirstOpen { get; set; }
 
             public override int ExecuteCommand(string name, params string[] parameters)
             {
@@ -41,17 +41,17 @@ namespace StartMain
                   case "System_Property_Exporter":
 
                     Document document = Autodesk.Navisworks.Api.Application.ActiveDocument;
-                    GetProperties.docModel = document.Models;
+                    GetPropertiesModel.DocModel = document.Models;
 
-                    firstOpen = true;
+                    FirstOpen = true;
 
-                    if (GetProperties.docModel.Count == 0)
+                    if (GetPropertiesModel.DocModel.Count == 0)
                     {
                         MessageBox.Show("No models currently appended in project." + "\n" + "Load models first.");
                         System.Windows.Application.Current.Shutdown();
                     }
 
-                    GetProperties.GetCurrModels();
+                    GetPropertiesModel.GetCurrModels();
 
                     UserInput ui = new UserInput(parameters);
                     ui.ShowDialog();

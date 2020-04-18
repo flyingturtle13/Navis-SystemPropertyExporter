@@ -23,45 +23,17 @@ namespace SystemPropertyExporter
     /// </summary>
     public partial class UserInput : Window
     {
-        private static ObservableCollection<Selected> _userItems;
-
-        public static ObservableCollection<Selected> UserItems
-        {
-            get
-            {
-                if (_userItems == null)
-                {
-                    _userItems = new ObservableCollection<Selected>();
-                }
-                return _userItems;
-            }
-            set
-            {
-                _userItems = value;
-            }
-        }
-
-        public static int Selected_HierLvl { get; set; }
-
-        public static string Selected_Cat { get; set; }
-
-        public static string Selected_Prop { get; set; }
-
-
-        //----------------------------------------------------------------------------------------
-
-
-        public UserInput(string[] parameters)
+        public UserInput(string[]parameters)
         {
             InitializeComponent();
 
             //Makes models loaded in project (Selection Tree) visible to User in Models List View
             try
             {
-                if (Start.firstOpen == true)
+                if (Start.FirstOpen == true)
                 {
-                    Models_ComBox.ItemsSource = GetProperties.modelList;
-                    Start.firstOpen = false;
+                    Models_ComBox.ItemsSource = GetPropertiesModel.ModelList;
+                    Start.FirstOpen = false;
                 }
             }
             catch (Exception exception)
@@ -79,18 +51,18 @@ namespace SystemPropertyExporter
         {
             if (SystemRB.IsChecked == true && Models_ComBox.SelectedItem != null)
             {
-                GetProperties.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "File");
-                CatProp_ListView.ItemsSource = GetProperties.ReturnCategories;
+                GetPropertiesModel.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "File");
+                CatProp_ListView.ItemsSource = GetPropertiesModel.ReturnCategories;
             }
             else if (CatRB.IsChecked == true && Models_ComBox.SelectedItem != null)
             {
-                GetProperties.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "Layer");
-                CatProp_ListView.ItemsSource = GetProperties.ReturnCategories;
+                GetPropertiesModel.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "Layer");
+                CatProp_ListView.ItemsSource = GetPropertiesModel.ReturnCategories;
             }
             else if (ComponentRB.IsChecked == true && Models_ComBox.SelectedItem != null)
             {
-                GetProperties.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "Block");
-                CatProp_ListView.ItemsSource = GetProperties.ReturnCategories;
+                GetPropertiesModel.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "Block");
+                CatProp_ListView.ItemsSource = GetPropertiesModel.ReturnCategories;
             }
         }
 
@@ -103,9 +75,9 @@ namespace SystemPropertyExporter
             {
                 if (Models_ComBox.SelectedItem != null)
                 {
-                    Selected_HierLvl = 1;
-                    GetProperties.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "File");
-                    CatProp_ListView.ItemsSource = GetProperties.ReturnCategories;
+                    ExportProperties.Selected_HierLvl = 1;
+                    GetPropertiesModel.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "File");
+                    CatProp_ListView.ItemsSource = GetPropertiesModel.ReturnCategories;
                 }
 
             }
@@ -124,9 +96,9 @@ namespace SystemPropertyExporter
             {
                 if (Models_ComBox.SelectedItem != null)
                 {
-                    Selected_HierLvl = 2;
-                    GetProperties.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "Layer");
-                    CatProp_ListView.ItemsSource = GetProperties.ReturnCategories;
+                    ExportProperties.Selected_HierLvl = 2;
+                    GetPropertiesModel.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "Layer");
+                    CatProp_ListView.ItemsSource = GetPropertiesModel.ReturnCategories;
                 }
             }
             catch (Exception exception)
@@ -144,9 +116,9 @@ namespace SystemPropertyExporter
             {
                 if (Models_ComBox.SelectedItem != null)
                 {
-                    Selected_HierLvl = 3;
-                    GetProperties.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "Block");
-                    CatProp_ListView.ItemsSource = GetProperties.ReturnCategories;
+                    ExportProperties.Selected_HierLvl = 3;
+                    GetPropertiesModel.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "Block");
+                    CatProp_ListView.ItemsSource = GetPropertiesModel.ReturnCategories;
                 }
             }
             catch (Exception exception)
@@ -193,15 +165,15 @@ namespace SystemPropertyExporter
             try
             {
                 //check previous selection is not same as current selection
-                GetProperties.ReturnProp.Clear();
+                GetPropertiesModel.ReturnProp.Clear();
 
                 //UPDATES AVAILABLE PROPERTIES WHEN CATEGORY SELECTED IN CatProp_ListView
-                var selectedCat = CatProp_ListView.SelectedItem as GetProperties.Category;
+                var selectedCat = CatProp_ListView.SelectedItem as Category;
                 if (selectedCat != null)  //INITIATES PROPERTIES RETRIEVEL WHEN CATEGORY SELECTED (CONTAINER NOT EMPTY)
                 {
-                    GetProperties.GetCatProperties(selectedCat.CatName);
-                    Selected_Cat = selectedCat.CatName;
-                    Prop_ListView.ItemsSource = GetProperties.ReturnProp;
+                    GetPropertiesModel.GetCatProperties(selectedCat.CatName);
+                    ExportProperties.Selected_Cat = selectedCat.CatName;
+                    Prop_ListView.ItemsSource = GetPropertiesModel.ReturnProp;
                 }
             }
             catch (Exception exception)
@@ -218,15 +190,16 @@ namespace SystemPropertyExporter
         //ADD BUTTON - QUEUES USER MODEL PROPERTIES FOR EXPORT
         private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
-            int ui1 = -1;
-            int ui2 = -2;
-            int ui3 = -3;
-            int ui4 = -4;
+            int ui1;
+            int ui2;
+            int ui3;
+            int ui4;
             bool duplicate = false;
 
             //Need to prevent item from being added if duplicate
             if (Dis_TB.Text == "INPUT DISCIPLINE MODEL" || Models_ComBox.Text == "SELECT MODEL"
-                    || Selected_Cat == null || Selected_HierLvl < 1 || Selected_HierLvl > 3)
+                    || ExportProperties.Selected_Cat == null || ExportProperties.Selected_HierLvl < 1 
+                    || ExportProperties.Selected_HierLvl > 3)
             {
                 MessageBox.Show("All fields require input or selection.");
             }
@@ -242,8 +215,8 @@ namespace SystemPropertyExporter
                     {
                         ui1 = combo.Discipline.IndexOf(Dis_TB.Text);
                         ui2 = combo.ModFile.IndexOf(Models_ComBox.Text);
-                        ui3 = combo.HierLvl.IndexOf(Selected_HierLvl.ToString());
-                        ui4 = combo.SelectCat.IndexOf(Selected_Cat);
+                        ui3 = combo.HierLvl.IndexOf(ExportProperties.Selected_HierLvl.ToString());
+                        ui4 = combo.SelectCat.IndexOf(ExportProperties.Selected_Cat);
 
                             //MessageBox.Show($"{combo.Discipline},{combo.ModFile},{combo.HierLvl},{combo.SelectCat}");
                             //MessageBox.Show($"{ui1},{ui2},{ui3},{ui4}");
@@ -259,21 +232,21 @@ namespace SystemPropertyExporter
 
                 if (duplicate == false)
                 {
-                    UserItems.Add(new Selected
+                    ExportProperties.UserItems.Add(new Selected
                     {
                         Discipline = Dis_TB.Text,
                         ModFile = Models_ComBox.Text,
-                        HierLvl = Selected_HierLvl.ToString(),
-                        SelectCat = Selected_Cat
+                        HierLvl = ExportProperties.Selected_HierLvl.ToString(),
+                        SelectCat = ExportProperties.Selected_Cat
                     });
 
                     //DISPLAY USER SELECTION IN MODELSSELECTED_LISTVIEW
-                    ModelsSelected_ListView.ItemsSource = UserItems;
+                    ModelsSelected_ListView.ItemsSource = ExportProperties.UserItems;
 
                     //RESET SLECTION AND USER INPUTS
-                    GetProperties.ReturnCategories.Clear();
-                    GetProperties.ReturnProp.Clear();
-                    Selected_Cat = null;
+                    GetPropertiesModel.ReturnCategories.Clear();
+                    GetPropertiesModel.ReturnProp.Clear();
+                    ExportProperties.Selected_Cat = null;
                     Dis_TB.Text = "INPUT DISCIPLINE MODEL";
                     Models_ComBox.Text = "SELECT MODEL";
                     Dis_TB.Foreground = new SolidColorBrush(Color.FromRgb(169, 169, 169));
@@ -284,8 +257,8 @@ namespace SystemPropertyExporter
 
         private void ResetBtn_Click(object sender, RoutedEventArgs e)
         {   
-            GetProperties.ReturnCategories.Clear();
-            GetProperties.ReturnProp.Clear();
+            GetPropertiesModel.ReturnCategories.Clear();
+            GetPropertiesModel.ReturnProp.Clear();
             Dis_TB.Text = "INPUT DISCIPLINE MODEL";
             Models_ComBox.Text = "SELECT MODEL";
             Dis_TB.Foreground = new SolidColorBrush(Color.FromRgb(169, 169, 169));
@@ -301,7 +274,7 @@ namespace SystemPropertyExporter
                 var selected = ModelsSelected_ListView.SelectedItems.Cast<object>().ToList();
                 foreach(Selected item in selected)
                 {
-                    UserItems.Remove(item);
+                    ExportProperties.UserItems.Remove(item);
                 }
             }
             catch (Exception exception)
@@ -315,26 +288,20 @@ namespace SystemPropertyExporter
         {
             try
             {
-                GetProperties.modelList.Clear();
+                GetPropertiesModel.ModelList.Clear();
                 this.Close();
             }
             catch (Exception exception)
             {
                 MessageBox.Show("Error! Original Message: " + exception.Message);
             }
-            
         }
 
-        
-    }
 
-
-    //CLASS TO BIND USER SELECTED PARAMETERS TO COLUMNS IN MODELSSELECTED_LISTVIEW
-    public class Selected
-    {
-        public string Discipline { get; set; }
-        public string ModFile { get; set; }
-        public string HierLvl { get; set; }
-        public string SelectCat { get; set; }
+        private void OkBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ExportProperties.ProcessModelsSelected();
+            this.Close();
+        }
     }
 }

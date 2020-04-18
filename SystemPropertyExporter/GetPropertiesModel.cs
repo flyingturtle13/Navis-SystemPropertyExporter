@@ -14,15 +14,18 @@ using System.Collections.ObjectModel;
 
 namespace SystemPropertyExporter
 {
-    class GetProperties
+    class GetPropertiesModel
     {
-        public static DocumentModels docModel { get; set; }
+        public static DocumentModels DocModel { get; set; }
+
 
         public static List<PropertyCategory> CurrCategories = new List<PropertyCategory>();
         
+
         private static ObservableCollection<string> _modelList;
 
-        public static ObservableCollection<string> modelList
+
+        public static ObservableCollection<string> ModelList
         {
             get
             {
@@ -38,8 +41,10 @@ namespace SystemPropertyExporter
             }
         }
         
+
         private static ObservableCollection<Property> _returnProp;
         
+
         public static ObservableCollection<Property> ReturnProp
         {
             get
@@ -56,7 +61,9 @@ namespace SystemPropertyExporter
             }
         }
 
+
         private static ObservableCollection<Category> _returnCategories;
+
 
         public static ObservableCollection<Category> ReturnCategories
         {
@@ -74,18 +81,13 @@ namespace SystemPropertyExporter
             }
         }
 
-        public class Category
-        {
-            public string CatName { get; set; }
-        }
-
-        public class Property
-        {
-            public string PropName { get; set; }
-            public string ValEx { get; set; }
-        }
+        
         public static ModelItem Root { get; set; }
         
+
+        //---------------------------------------------------------------------------------------
+
+
         //STEP 1
         //THIS METHOD TAKES INPUTS FROM UserInput FORM.
         //DETERMINES IF CURRENT PROJECT IS NWF (LIVE) OR IF NWD (SNAPSHOT)
@@ -96,7 +98,7 @@ namespace SystemPropertyExporter
             ReturnCategories.Clear();
             
             //CHECK IF FILE IS NWF
-            foreach (Model model in docModel)
+            foreach (Model model in DocModel)
             {
                 if (model.RootItem.DisplayName == displayName)
                 {
@@ -109,7 +111,7 @@ namespace SystemPropertyExporter
             //ENTERS IF FILE IS NWD (GO NEXT LEVEL TO SEARCH FOR MODEL FILES)
             if (Root == null)
             {
-                foreach (Model model in docModel)
+                foreach (Model model in DocModel)
                 {
                     ModelItem root = model.RootItem as ModelItem;
                     foreach (ModelItem item in root.Children)
@@ -124,6 +126,7 @@ namespace SystemPropertyExporter
             }
         }
 
+
         //DETERMINES WHAT HIERARCHY LEVEL TO ACCESS PROPERTIES
         //BASED ON USER INPUT (classType - File, Layer, or Block).  DIRECTION FROM GetSystemProperties Method.
         private static int ClassTypeCheck(ModelItem item, string classType) {
@@ -134,11 +137,11 @@ namespace SystemPropertyExporter
                 {
                     case "File":
                        if (subItem1.ClassDisplayName == classType)
-                        {
+                       {
                             CategoryTypes(subItem1);
                             return 0;
-                        }
-                        break;
+                       }
+                       break;
 
                     case "Layer":
                         if (subItem1.ClassDisplayName == classType || subItem1.IsLayer == true)
@@ -152,9 +155,9 @@ namespace SystemPropertyExporter
                     case "Block":
                         if (subItem1.ClassDisplayName == classType || subItem1.IsComposite == true)
                         {
-                            //MessageBox.Show(subItem1.ClassDisplayName + ", " + subItem1.DisplayName);
-                            CategoryTypes(subItem1);
-                            return 0;
+                             //MessageBox.Show(subItem1.ClassDisplayName + ", " + subItem1.DisplayName);
+                             CategoryTypes(subItem1);
+                             return 0;
                         }
                         break;
                 }
@@ -162,15 +165,13 @@ namespace SystemPropertyExporter
             return 0;
         }
 
+
         //ROUTED TO ACCESS MODEL ITEM ASSOCIATED CATEGORY TYPES AFTER HIEARCHY LEVEL DETAIL(classType)
         //MATCHED
         private static void CategoryTypes(ModelItem item)
         {
-            //List<ModelItem> dList = item.DescendantsAndSelf
-            //string[] disName = item.DisplayName.Split('_', '-', '.', ' ');
-
             foreach (PropertyCategory oPC in item.PropertyCategories)
-            {   
+            {
                 //STORES IN ReturnCategories TO DISPLAY AVAILABLE CATEGORIES IN UserInput FORM IN CatProp_ListView
                 //CurrCategories STORES CATEGORIES AS PropertyCategory (Navis API) TYPE
                 //THIS WILL BE ACCESSED IN STEP 2 (GetCatProperties()) AFTER USER HAS SELECTED WHICH CATEGORY TO ACCESS
@@ -181,6 +182,7 @@ namespace SystemPropertyExporter
                 });
             }
         }
+
 
         //STEP 2
         //ROUTED HERE FROM UserInput FORM AFTER USER SELECTS CATEGORY TYPE TO ACCESS ASSOCIATED PROPERTIES 
@@ -206,52 +208,38 @@ namespace SystemPropertyExporter
                 }
             }
         }
-                //ReturnCategories.Add(oPC.DisplayName);
-                //    if (oPC.DisplayName.ToString() == "Item")
-                //    {
-                //        foreach (DataProperty oDP in oPC.Properties)
-                //        {
-                //            if (oDP.DisplayName.ToString() == "Source File Name")
-                //            {
-                //                string val = oDP.Value.ToDisplayString();
-                //                string[] valName = val.Split('.');
 
-                //                //source file is RVT (Revit)
-                //                if (valName.Last() == "rvt")
-                //                {
-
-                //                }
-                //                //if source file is DWG format (AutoCAD)
-                //                else if (valName.Last() == "dwg")
-                //                {
-
-                //                }
-                //                //if file in selection tree is an NWD file
-                //                else if (disName.Last() == "nwd")
-                //                {
-
-                //                }
-                //            }
-                //        }
-                //    }
 
         //ROUTED FROM StarMain TO STORE PROJECT MODELS IN modelList LIST 
         //TO BE DISPLAYED IN UserInput USING Models_ComboBox
         public static void GetCurrModels()
         {
-            foreach (Model model in docModel)
+            foreach (Model model in DocModel)
             {
-                modelList.Add(model.RootItem.DisplayName);
+                ModelList.Add(model.RootItem.DisplayName);
             }
 
-            foreach (Model model in docModel)
+            foreach (Model model in DocModel)
             {
                 ModelItem root = model.RootItem as ModelItem;
                 foreach (ModelItem item in root.Children)
                 {
-                    modelList.Add(item.DisplayName);
+                    ModelList.Add(item.DisplayName);
                 }
             }
         }
+    }
+    
+
+    public class Category
+    {
+        public string CatName { get; set; }
+    }
+
+
+    public class Property
+    {
+        public string PropName { get; set; }
+        public string ValEx { get; set; }
     }
 }
