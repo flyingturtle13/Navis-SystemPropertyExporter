@@ -68,10 +68,6 @@ namespace SystemPropertyExporter
 
         public static List<int> ItemIdx = new List<int>();
 
-        //public static Dictionary<List<string>, List<string>> PropVal = new Dictionary<List<string>, List<string>>();
-
-        //public static Dictionary<int, object> ExportPropVal = new Dictionary<int, object>();
-
         public static string CurrDis { get; set; }
 
         public static string CurrModelFile { get; set; }
@@ -238,8 +234,6 @@ namespace SystemPropertyExporter
                     ItemIdx.Add(Idx);
                     ExportProp.Add(oDP.DisplayName);
                     ExportVal.Add(oDP.Value.ToString().Substring(oDP.Value.ToString().IndexOf(':') + 1));
-                    //ExportPropVal.Add(ItemIdx, PropVal);
-                    //((Dictionary<List<string>,List<string>>)ExportPropVal[ItemIdx]).Add(ExportProp,ExportVal);  
                 }
                 Idx++;
             }

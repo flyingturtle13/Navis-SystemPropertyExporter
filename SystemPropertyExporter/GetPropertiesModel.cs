@@ -18,12 +18,9 @@ namespace SystemPropertyExporter
     {
         public static DocumentModels DocModel { get; set; }
 
-
         public static List<PropertyCategory> CurrCategories = new List<PropertyCategory>();
         
-
         private static ObservableCollection<string> _modelList;
-
 
         public static ObservableCollection<string> ModelList
         {
@@ -40,10 +37,8 @@ namespace SystemPropertyExporter
                 _modelList = value;
             }
         }
-        
 
         private static ObservableCollection<Property> _returnProp;
-        
 
         public static ObservableCollection<Property> ReturnProp
         {
@@ -61,9 +56,7 @@ namespace SystemPropertyExporter
             }
         }
 
-
         private static ObservableCollection<Category> _returnCategories;
-
 
         public static ObservableCollection<Category> ReturnCategories
         {
@@ -80,7 +73,6 @@ namespace SystemPropertyExporter
                 _returnCategories = value;
             }
         }
-
         
         public static ModelItem Root { get; set; }
         
@@ -146,7 +138,6 @@ namespace SystemPropertyExporter
                     case "Layer":
                         if (subItem1.ClassDisplayName == classType || subItem1.IsLayer == true)
                         {
-                            //MessageBox.Show(subItem1.ClassDisplayName + ", " + subItem1.DisplayName);
                             CategoryTypes(subItem1);
                             return 0;
                         }
@@ -155,7 +146,6 @@ namespace SystemPropertyExporter
                     case "Block":
                         if (subItem1.ClassDisplayName == classType || subItem1.IsComposite == true)
                         {
-                             //MessageBox.Show(subItem1.ClassDisplayName + ", " + subItem1.DisplayName);
                              CategoryTypes(subItem1);
                              return 0;
                         }

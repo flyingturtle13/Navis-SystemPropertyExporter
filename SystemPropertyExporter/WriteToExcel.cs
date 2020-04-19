@@ -73,10 +73,10 @@ namespace SystemPropertyExporter
                     var rangeCat = xlWorksheet.get_Range(cellCat, cellCat);
                     rangeCat.Value2 = item.ExpCategory;
 
-                    //1. loop through properties in ExportPropVal using indexOf current ExportItem
-                    //IndexIdx, ExportProp, ExportVal
-                    //2. loop through number of rows desired from ModelsSelected_ListView
-                    //  create new worksheet per Row.
+                    //1. loop through properties in ExportPropVal using indexOf current ExportItem -- DELETE AFTER
+                    //IndexIdx, ExportProp, ExportVal -- DELETE AFTER
+                    //2. loop through number of rows desired from ModelsSelected_ListView -- DELETE AFTER
+                    //  create new worksheet per Row. -- DELETE AFTER
 
                     //----------------------------------------------------------------------------------------------
 

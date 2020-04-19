@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SystemPropertyExporter;
 using System.Collections.ObjectModel;
+using Microsoft.Win32;
 using StartMain;
 
 namespace SystemPropertyExporter
@@ -263,8 +265,92 @@ namespace SystemPropertyExporter
             Models_ComBox.Text = "SELECT MODEL";
             Dis_TB.Foreground = new SolidColorBrush(Color.FromRgb(169, 169, 169));
         }
+
+
+        //SAVE BUTTON - ABILITY TO SAVE USER LIST SO DOES NOT HAVE TO BE
+        //RECREATED FOR FUTURE USE.
+        private void SaveList_Click(object sender, RoutedEventArgs e)
+        {
+            string filename = "";
+            SaveFileDialog saveList = new SaveFileDialog();
+
+            saveList.Title = "Save to...";
+            saveList.Filter = "Text Documents | *.txt";
+
+            if (saveList.ShowDialog() == true)
+            {
+                filename = saveList.FileName.ToString();
+
+                if (filename != "")
+                {
+                    using (StreamWriter sw = new StreamWriter(filename))
+                    {
+                        var selected = ModelsSelected_ListView.ItemsSource.Cast<object>().ToList();
+                        foreach (Selected item in selected)
+                        {
+                            sw.WriteLine("--");
+                            sw.WriteLine(item.Discipline);
+                            sw.WriteLine(item.ModFile);
+                            sw.WriteLine(item.HierLvl);
+                            sw.WriteLine(item.SelectCat);
+                        }
+                        sw.Dispose();
+                        sw.Close();
+                    }
+                }
+            }
+        }
         
 
+        //LOAD LIST BUTTON - ABILITY TO LOAD A PREVIOUSLY SAVED LIST
+        //SO USER LIST DOES NOT HAVE TO BE RECREATED.
+        private void LoadList_Click(object sender, RoutedEventArgs e)
+        {
+            string filename = "";
+            OpenFileDialog loadList = new OpenFileDialog();
+
+            loadList.Title = "Open File";
+            loadList.Filter = "Text Documents | *.txt";
+
+            if (loadList.ShowDialog() == true)
+            {
+                try
+                {
+                    ExportProperties.UserItems.Clear();
+
+                    filename = loadList.FileName.ToString();
+                    var fileLines = File.ReadAllLines(filename);
+
+                    int i = 0;
+
+                    foreach (String line in fileLines)
+                    {
+                        if (line == "--")
+                        {
+                            ExportProperties.UserItems.Add( new Selected
+                            {
+                                Discipline = fileLines[i+1],
+                                ModFile = fileLines[i+2],
+                                HierLvl = fileLines[i+3],
+                                SelectCat = fileLines[i+4]
+                            });
+                        }
+
+                        i++;
+                    }
+
+                    ModelsSelected_ListView.ItemsSource = ExportProperties.UserItems;
+                }
+                catch (Exception x)
+                {
+                    MessageBox.Show("Error: Could not read file from disk. Original error: " + x.Message);
+                }
+            }
+        }
+
+
+        //REMOVE BUTTON - DELETES ADDED ITEM TO ModelsSelected_ListView IF USER CHOOSES
+        //USER MUST SELECT ONE OR MULTIPLE ITEMS TO BE REMOVED.
         private void RemoveBtn_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -300,8 +386,11 @@ namespace SystemPropertyExporter
 
         private void OkBtn_Click(object sender, RoutedEventArgs e)
         {
+            this.Hide();
             ExportProperties.ProcessModelsSelected();
             this.Close();
         }
+
+        
     }
 }
