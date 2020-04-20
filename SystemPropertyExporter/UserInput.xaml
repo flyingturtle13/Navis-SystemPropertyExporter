@@ -6,16 +6,20 @@
              xmlns:local="clr-namespace:SystemPropertyExporter"
              mc:Ignorable="d" 
              d:DesignHeight="600
-        " d:DesignWidth="800" WindowStartupLocation="CenterScreen" Title="SYSTEM PROPERTIES EXPORTER" Width="800" Topmost="True">
+        " d:DesignWidth="800" WindowStartupLocation="CenterScreen" Title="SYSTEM PROPERTIES EXPORTER" Width="800">
     <Grid Margin="0,0,-0.4,-0.6">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="176*"/>
+            <RowDefinition Height="395*"/>
+        </Grid.RowDefinitions>
         <Label Content="PROJECT MODELS" HorizontalAlignment="Left" TextBlock.TextAlignment="Center" Margin="33,108,0,0" Width="245" VerticalAlignment="Top" HorizontalContentAlignment="Center" FontWeight="Bold"/>
         <ComboBox x:Name="Models_ComBox" IsEditable ="True" IsReadOnly="True" Text="SELECT MODEL" HorizontalAlignment="Left" Margin="33,143,0,0" Width="242" BorderBrush="Black" Background="White" VerticalAlignment="Top" HorizontalContentAlignment="Center" FontSize="11" SelectionChanged="ModelCB_Select" MaxDropDownHeight="600"/>
-        <Label Content="MODEL HIERARCHY SELECTION" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="35,191,0,0" HorizontalContentAlignment="Center" FontWeight="Bold" Width="239"/>
-        <RadioButton x:Name="SystemRB" GroupName="Hierarchy" Content="1. Discipline System" HorizontalAlignment="Left" Margin="37,219,0,0" VerticalAlignment="Top" Checked="SystemRB_Checked"/>
-        <RadioButton x:Name="CatRB" GroupName="Hierarchy" Content="2. Discipline System Parts" HorizontalAlignment="Left" Margin="37,244,0,0" VerticalAlignment="Top" Checked="CatRB_Checked"/>
-        <RadioButton x:Name="ComponentRB" GroupName="Hierarchy" Content="3. System Individual Components" HorizontalAlignment="Left" Margin="37,270,0,0" VerticalAlignment="Top" Checked="ComponentRB_Checked"/>
+        <Label Content="MODEL HIERARCHY SELECTION" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="35,15.2,0,0" HorizontalContentAlignment="Center" FontWeight="Bold" Width="239" Grid.Row="1"/>
+        <RadioButton x:Name="SystemRB" GroupName="Hierarchy" Content="1. Discipline System" HorizontalAlignment="Left" Margin="37,43.2,0,0" VerticalAlignment="Top" Checked="SystemRB_Checked" Grid.Row="1"/>
+        <RadioButton x:Name="CatRB" GroupName="Hierarchy" Content="2. Discipline System Parts" HorizontalAlignment="Left" Margin="37,68.2,0,0" VerticalAlignment="Top" Checked="CatRB_Checked" Grid.Row="1"/>
+        <RadioButton x:Name="ComponentRB" GroupName="Hierarchy" Content="3. System Individual Components" HorizontalAlignment="Left" Margin="37,94.2,0,0" VerticalAlignment="Top" Checked="ComponentRB_Checked" Grid.Row="1"/>
         <Label Content="PROPERTY CATEGORIES" HorizontalAlignment="Left" Margin="306,24,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="149" FontWeight="Bold"/>
-        <ListView x:Name="CatProp_ListView" ItemsSource ="{Binding GetProperties.ReturnCategories}" SelectedItem="{Binding IsSelected}" SelectionMode="Extended" HorizontalAlignment="Left" Height="229" Margin="305,58,0,0" VerticalAlignment="Top" Width="150" SelectionChanged="PropCat_Selection">
+        <ListView x:Name="CatProp_ListView" ItemsSource ="{Binding GetProperties.ReturnCategories}" SelectedItem="{Binding IsSelected}" SelectionMode="Extended" HorizontalAlignment="Left" Height="229" Margin="305,58,0,0" VerticalAlignment="Top" Width="150" SelectionChanged="PropCat_Selection" Grid.RowSpan="2">
             <ListView.View>
                 <GridView ColumnHeaderToolTip="AVAILABLE CATEGORIES">
                     <GridViewColumn DisplayMemberBinding=
@@ -25,8 +29,8 @@
             </ListView.View>
         </ListView>
         <Label Content="PROPERTIES AVAILABLE" HorizontalAlignment="Left" Margin="491,24,0,0" VerticalAlignment="Top" Width="276" FontWeight="Bold" HorizontalContentAlignment="Center"/>
-        <Label Content="SELECTED MODELS &amp; PROPERTIES TO EXPORT" HorizontalAlignment="Left" Margin="30,336,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-        <ListView x:Name="ModelsSelected_ListView" HorizontalAlignment="Left" Height="120" Margin="33,363,0,0" VerticalAlignment="Top" Width="726">
+        <Label Content="SELECTED MODELS &amp; PROPERTIES TO EXPORT" HorizontalAlignment="Left" Margin="30,160.2,0,0" VerticalAlignment="Top" FontWeight="Bold" Grid.Row="1"/>
+        <ListView x:Name="ModelsSelected_ListView" HorizontalAlignment="Left" Height="120" Margin="33,187.2,0,0" VerticalAlignment="Top" Width="726" Grid.Row="1">
             <ListView.View>
                 <GridView ColumnHeaderToolTip="Selected Discipline Properties for Export">
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Discipline}" Header="DISCIPLINE" Width="200">
@@ -55,12 +59,12 @@
             </ListView.View>
         </ListView>
 
-        <Button x:Name="Ok_Btn" Content="OK" HorizontalAlignment="Left" Margin="582,527,0,0" VerticalAlignment="Top" Width="75" Click="OkBtn_Click" Background="#FFF4F4F4" FontWeight="Bold"/>
-        <Button x:Name="Cancel_Btn" Content="Cancel" HorizontalAlignment="Left" Margin="688,527,0,0" VerticalAlignment="Top" Width="75" Click="CancelBtn_Click" Background="#FFF4F4F4" FontWeight="Bold"/>
-        <Button x:Name="Add_Btn" Content="Add" HorizontalAlignment="Left" Margin="582,298,0,0" VerticalAlignment="Top" Width="75" Click="AddBtn_Click" Background="#FFF4F4F4"/>
-        <Button x:Name="Reset_Btn" Content="Reset" HorizontalAlignment="Left" Margin="683,298,0,0" VerticalAlignment="Top" Width="75" Click="ResetBtn_Click" Background="#FFF4F4F4"/>
-        <Button x:Name="Remove_Btn" Content="Remove" HorizontalAlignment="Left" Margin="36,494,0,0" VerticalAlignment="Top" Width="75" Click="RemoveBtn_Click" Background="#FFF4F4F4"/>
-        <ListView x:Name="Prop_ListView" HorizontalAlignment="Left" Height="228" Margin="487,56,0,0" VerticalAlignment="Top" Width="283">
+        <Button x:Name="Ok_Btn" Content="OK" HorizontalAlignment="Left" Margin="582,351.2,0,0" VerticalAlignment="Top" Width="75" Click="OkBtn_Click" Background="#FFF4F4F4" FontWeight="Bold" Grid.Row="1"/>
+        <Button x:Name="Cancel_Btn" Content="Cancel" HorizontalAlignment="Left" Margin="688,351.2,0,0" VerticalAlignment="Top" Width="75" Click="CancelBtn_Click" Background="#FFF4F4F4" FontWeight="Bold" Grid.Row="1"/>
+        <Button x:Name="Add_Btn" Content="Add" HorizontalAlignment="Left" Margin="582,122.2,0,0" VerticalAlignment="Top" Width="75" Click="AddBtn_Click" Background="#FFF4F4F4" Grid.Row="1"/>
+        <Button x:Name="Reset_Btn" Content="Reset" HorizontalAlignment="Left" Margin="683,122.2,0,0" VerticalAlignment="Top" Width="75" Click="ResetBtn_Click" Background="#FFF4F4F4" Grid.Row="1"/>
+        <Button x:Name="Remove_Btn" Content="Remove" HorizontalAlignment="Left" Margin="36,318.2,0,0" VerticalAlignment="Top" Width="75" Click="RemoveBtn_Click" Background="#FFF4F4F4" Grid.Row="1"/>
+        <ListView x:Name="Prop_ListView" HorizontalAlignment="Left" Height="228" Margin="487,56,0,0" VerticalAlignment="Top" Width="283" Grid.RowSpan="2">
             <ListView.View>
                 <GridView ColumnHeaderToolTip="AVAILABLE PROPERTIES AND EXAMPLE VALUES">
                     <GridViewColumn DisplayMemberBinding=
@@ -76,8 +80,8 @@
         </ListView>
         <Label Content="DISCIPLINE" HorizontalAlignment="Left" Margin="37,26,0,0" VerticalAlignment="Top" FontWeight="Bold" Width="238" HorizontalContentAlignment="Center"/>
         <TextBox x:Name="Dis_TB" HorizontalAlignment="Left" Height="23" Margin="36,63,0,0" TextWrapping="Wrap" Text="INPUT DISCIPLINE MODEL" VerticalAlignment="Top" Width="235" FontSize="11" KeyDown="Dis_KeyDn" LostFocus="Dis_LostFocus" Foreground="DarkGray" GotFocus="Dis_GotFocus"/>
-        <Line Fill="Black"  X1="50" Y1="333"  X2="750" Y2="333" StrokeThickness="0.5" Stroke="Black"></Line>
-        <Button x:Name="SaveList_Btn" Content="Save List" HorizontalAlignment="Left" Margin="132,494,0,0" VerticalAlignment="Top" Width="75" Background="#FFF4F4F4" Click="SaveList_Click"/>
-        <Button x:Name="Load_Btn" Content="Load List" HorizontalAlignment="Left" Margin="229,494,0,0" VerticalAlignment="Top" Width="75" Background="#FFF4F4F4" Click="LoadList_Click"/>
+        <Line Fill="Black"  X1="50" Y1="333"  X2="750" Y2="333" StrokeThickness="0.75" Stroke="Black" Grid.RowSpan="2"></Line>
+        <Button x:Name="SaveList_Btn" Content="Save List" HorizontalAlignment="Left" Margin="132,318.2,0,0" VerticalAlignment="Top" Width="75" Background="#FFF4F4F4" Click="SaveList_Click" Grid.Row="1"/>
+        <Button x:Name="Load_Btn" Content="Load List" HorizontalAlignment="Left" Margin="229,318.2,0,0" VerticalAlignment="Top" Width="75" Background="#FFF4F4F4" Click="LoadList_Click" Grid.Row="1"/>
     </Grid>
 </Window>

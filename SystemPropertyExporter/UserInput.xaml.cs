@@ -375,6 +375,7 @@ namespace SystemPropertyExporter
             try
             {
                 GetPropertiesModel.ModelList.Clear();
+                ExportProperties.Idx = 0;
                 this.Close();
             }
             catch (Exception exception)
@@ -386,8 +387,14 @@ namespace SystemPropertyExporter
 
         private void OkBtn_Click(object sender, RoutedEventArgs e)
         {
-            this.Hide();
             ExportProperties.ProcessModelsSelected();
+            GetPropertiesModel.ModelList.Clear();
+            ExportProperties.ExportItems.Clear();
+            ExportProperties.UserItems.Clear();
+            ExportProperties.ExportProp.Clear();
+            ExportProperties.ExportVal.Clear();
+            ExportProperties.ItemIdx.Clear();
+            ExportProperties.Idx = 0;
             this.Close();
         }
 

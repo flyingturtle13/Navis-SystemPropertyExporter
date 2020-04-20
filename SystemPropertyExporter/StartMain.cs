@@ -49,6 +49,7 @@ namespace StartMain
                     {
                         MessageBox.Show("No models currently appended in project." + "\n" + "Load models first.");
                         System.Windows.Application.Current.Shutdown();
+                        break;
                     }
 
                     GetPropertiesModel.GetCurrModels();

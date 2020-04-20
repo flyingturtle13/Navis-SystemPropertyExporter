@@ -88,8 +88,8 @@ namespace SystemPropertyExporter
             {
                 CurrDis = item.Discipline;
                 CurrModelFile = item.ModFile;
-                CurrExportLvl = item.HierLvl;
                 CurrExportCat = item.SelectCat;
+                
 
                 try
                 {
@@ -140,17 +140,25 @@ namespace SystemPropertyExporter
             {
                 foreach (ModelItem subItem1 in mItem.DescendantsAndSelf)
                 {
+                    string type = "";
+
                     switch (classType)
                     {
                         case "1": //"File"
-                            if (subItem1.ClassDisplayName == classType)
+                            type = "File";
+                            CurrExportLvl = "Overall System";
+
+                            if (subItem1.ClassDisplayName == type)
                             {
                                 CategoryTypes_Export(subItem1);
                             }
                             break;
 
                         case "2": //"Layer"
-                            if (subItem1.ClassDisplayName == classType || subItem1.IsLayer == true)
+                            type = "Layer";
+                            CurrExportLvl = "Part Types";
+
+                            if (subItem1.ClassDisplayName == type || subItem1.IsLayer == true)
                             {
                                 foreach (ModelItem obj in subItem1.Children)
                                 {
@@ -168,7 +176,10 @@ namespace SystemPropertyExporter
                             break;
 
                         case "3": //Block
-                            if (subItem1.ClassDisplayName == classType || subItem1.IsComposite == true)
+                            type = "Block";
+                            CurrExportLvl = "Individual Components";
+
+                            if (subItem1.ClassDisplayName == type || subItem1.IsComposite == true)
                             {
 
                                 //MessageBox.Show(subItem1.ClassDisplayName + ", " + subItem1.DisplayName);
@@ -180,7 +191,7 @@ namespace SystemPropertyExporter
                                 {
                                     if (obj.IsInsert == false && obj.IsComposite == false && obj.IsCollection == false && obj.ClassDisplayName != "Block")
                                     {
-                                        CategoryTypes_Export(subItem1); ;
+                                        CategoryTypes_Export(subItem1);
                                     }
                                 }
                             }
@@ -229,12 +240,23 @@ namespace SystemPropertyExporter
         {
             try
             {
-                foreach (DataProperty oDP in category.Properties)
+                if (category.Properties.Count > 0)
+                {
+                    foreach (DataProperty oDP in category.Properties)
+                    {
+                        ItemIdx.Add(Idx);
+                        ExportProp.Add(oDP.DisplayName);
+                        ExportVal.Add(oDP.Value.ToString().Substring(oDP.Value.ToString().IndexOf(':') + 1));
+
+                    }
+                }
+                else
                 {
                     ItemIdx.Add(Idx);
-                    ExportProp.Add(oDP.DisplayName);
-                    ExportVal.Add(oDP.Value.ToString().Substring(oDP.Value.ToString().IndexOf(':') + 1));
+                    ExportProp.Add("null");
+                    ExportVal.Add("null");
                 }
+
                 Idx++;
             }
             catch (Exception exception)

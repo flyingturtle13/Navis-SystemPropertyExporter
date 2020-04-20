@@ -35,22 +35,57 @@ namespace SystemPropertyExporter
 
                 //Create New Workbook & Worksheets
                 xlWorkbook = xlApp.Workbooks.Add(Missing.Value);
-                Excel.Worksheet xlWorksheet = (Excel.Worksheet)xlWorkbook.Worksheets.Add();
-                //Excel.Worksheet xlWorksheet = (Excel.Worksheet)xlWorkbook.Worksheets.get_Item(1);
-                xlWorksheet.Name = "Model Properties";
-
+                Excel.Worksheet xlWorksheet = (Excel.Worksheet)xlWorkbook.Worksheets.Add(
+                    Type.Missing,Type.Missing, ExportProperties.UserItems.Count+1, Type.Missing);
+        
                 int rowNum = 2;
-                int colNum;
+                int colNum = 6;
+                int modelIdx = 0;
+                bool match = false;
 
                 foreach (Export item in ExportProperties.ExportItems)
                 {
-                    colNum = 6;
+                   
+                    //MessageBox.Show($"{item.ExpDiscipline}, {item.ExpModFile}, {item.ExpHierLvl}, {item.ExpCategory}");
+                    //Excel.Worksheet xlWorksheet;
+                    //TRY NEXT
+                    foreach (Excel.Worksheet sheet in xlWorkbook.Worksheets)
+                    {
+                        if (sheet.Name == $"{item.ExpDiscipline}-{item.ExpCategory}")
+                        {
+                            match = true;
+                            xlWorksheet = (Excel.Worksheet)xlWorkbook.Sheets[sheet.Name];
+                            xlWorksheet.Select();
+                            xlWorksheet.Activate();
 
-                    xlWorksheet.Cells[1, 1] = "DISCIPLINE";
-                    xlWorksheet.Cells[1, 2] = "MODEL FILE NAME";
-                    xlWorksheet.Cells[1, 3] = "HIERARCHY LEVEL";
-                    xlWorksheet.Cells[1, 4] = "ELEMENT NAME";
-                    xlWorksheet.Cells[1, 5] = "CATEGORY";
+                            Excel.Range last = xlWorksheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell, Type.Missing);
+                            rowNum = last.Row + 1;
+                            break;
+                        }
+                    }
+
+                    if (match == false)
+                    {
+                        //xlWorksheet = (Excel.Worksheet)xlWorkbook.Worksheets.Add();
+                        xlWorksheet = (Excel.Worksheet)xlWorkbook.Sheets[modelIdx + 1];
+                        xlWorksheet.Select();
+                        xlWorksheet.Activate();
+                        
+                        xlWorksheet.Name = $"{item.ExpDiscipline}-{item.ExpCategory}";
+                        xlWorksheet.Cells[1, 1] = "DISCIPLINE";
+                        xlWorksheet.Cells[1, 2] = "MODEL FILE NAME";
+                        xlWorksheet.Cells[1, 3] = "HIERARCHY LEVEL";
+                        xlWorksheet.Cells[1, 4] = "ELEMENT NAME";
+                        xlWorksheet.Cells[1, 5] = "CATEGORY";
+
+                        modelIdx++;
+                        //REST BACK TO FIRST ROW FOR STORING ON NEXT WORKSHEET
+                        rowNum = 2;
+                        //MessageBox.Show($"{currItemDis}, {xlWorksheet.Index}, {xlWorksheet.Name}");
+                    }
+                   
+                    //bool first = true;
+                    colNum = 6;
 
                     //write properties to excel file
                     string cellDis = "A" + rowNum.ToString();
@@ -73,99 +108,101 @@ namespace SystemPropertyExporter
                     var rangeCat = xlWorksheet.get_Range(cellCat, cellCat);
                     rangeCat.Value2 = item.ExpCategory;
 
-                    //1. loop through properties in ExportPropVal using indexOf current ExportItem -- DELETE AFTER
-                    //IndexIdx, ExportProp, ExportVal -- DELETE AFTER
-                    //2. loop through number of rows desired from ModelsSelected_ListView -- DELETE AFTER
-                    //  create new worksheet per Row. -- DELETE AFTER
-
                     //----------------------------------------------------------------------------------------------
-
+                    
                     int indexMatch = ExportProperties.ExportItems.IndexOf(item);
                     var currRange = PropRange(indexMatch);
                     int idxMin = currRange.iMin;
                     int idxMax = currRange.iMax;
                    
-                    //Create range of index of when index identifier occurs and last
-                    //loops through to record from ExportProp and ExportVal
-                    //Column will increase while row remains constant
-
                     for (int i = idxMin; i <= idxMax; i++)
                     {
-                        //xlWorksheet.Cells[1, colNum] = "Proptery - " + ExportProperties.ExportProp[i];
-                        //MessageBox.Show(ExportProperties.ExportProp[i]);
-                        //MessageBox.Show(ExportProperties.ExportVal[i]);
-                        var rangeVal = (Excel.Range) xlWorksheet.Cells[rowNum, colNum]; //range using # (int) for column?
+                        var rangeProp = (Excel.Range)xlWorksheet.Cells[1, colNum]; //range using # (int) for column?
+                        rangeProp.Value2 = "Property - " + ExportProperties.ExportProp[i];
+                    
+                        var rangeVal = (Excel.Range)xlWorksheet.Cells[rowNum, colNum]; //range using # (int) for column?
                         rangeVal.Value2 = ExportProperties.ExportVal[i];
-
+                            
                         colNum++;
                     }
-
+                   
+                    match = false;
                     rowNum++;
                 }
-
-
-                //Locate file save location
-                string exportYr = DateTime.Now.Year.ToString();
-                string exportMonth = DateTime.Now.Month.ToString();
-                string exportDay = DateTime.Now.Day.ToString();
                 
-                if (exportMonth.Length == 1)
-                {
-                    exportMonth = "0" + exportMonth;
-                }
+                    //Locate file save location
+                    string exportYr = DateTime.Now.Year.ToString();
+                    string exportMonth = DateTime.Now.Month.ToString();
+                    string exportDay = DateTime.Now.Day.ToString();
 
-                if (exportDay.Length == 1)
-                {
-                    exportDay = "0" + exportDay;
-                }
-                
-                string exportDate = exportYr + exportMonth + exportDay;
+                    if (exportMonth.Length == 1)
+                    {
+                        exportMonth = "0" + exportMonth;
+                    }
 
-                SaveFileDialog saveModelProperties = new SaveFileDialog();
+                    if (exportDay.Length == 1)
+                    {
+                        exportDay = "0" + exportDay;
+                    }
 
-                saveModelProperties.Title = "Save to...";
-                saveModelProperties.Filter = "Excel Workbook | *.xlsx|Excel 97-2003 Workbook | *.xls";
-                saveModelProperties.FileName = exportDate + "-System_Property_Data";
+                    string exportDate = exportYr + exportMonth + exportDay;
 
-                if (saveModelProperties.ShowDialog() == DialogResult.OK)
-                {
-                    string path = saveModelProperties.FileName;
-                    xlWorkbook.SaveCopyAs(path);
-                    xlWorkbook.Saved = true;
-                    xlWorkbook.Close(true, Missing.Value, Missing.Value);
-                    xlApp.Quit();
-                }
+                    SaveFileDialog saveModelProperties = new SaveFileDialog();
 
-                xlApp.Visible = false;
+                    saveModelProperties.Title = "Save to...";
+                    saveModelProperties.Filter = "Excel Workbook | *.xlsx|Excel 97-2003 Workbook | *.xls";
+                    saveModelProperties.FileName = exportDate + "-System_Property_Data";
 
+                    if (saveModelProperties.ShowDialog() == DialogResult.OK)
+                    {
+                        string path = saveModelProperties.FileName;
+                        xlWorkbook.SaveCopyAs(path);
+                        xlWorkbook.Saved = true;
+                        xlWorkbook.Close(true, Missing.Value, Missing.Value);
+                        xlApp.Quit();
+                        
+                    }
+
+                    xlApp.Visible = false;
             }
             catch (Exception exception)
             {
                 MessageBox.Show("Error! Check if clash test(s) exist or previously run.  Original Message: " + exception.Message);
             }
         }
-        
+
 
         private static (int iMin, int iMax) PropRange(int indexMatch)
         {
             int iMin = -1;
             int iMax = -1;
-            bool first = true;
+            bool firstMatch = true;
 
-            for (int i = 0; i < ExportProperties.ItemIdx.Count - 1; i++)
+            //EDGE CASE CHECK WHERE INDEX = 0 OR NULL
+            if (indexMatch == 0)
             {
-                if (indexMatch == ExportProperties.ItemIdx[i])
+                iMin = 0;
+                iMax = 0;
+            }
+            else
+            //FOR ALL OTHER CASES
+            {
+                for (int i = 0; i < ExportProperties.ItemIdx.Count; i++)
                 {
-                    if (first == true)
+                    if (indexMatch == ExportProperties.ItemIdx[i])
                     {
-                        iMin = i;
-                        first = false;
-                    }
-                    else
-                    {
-                        if (i > iMax)
+                        if (firstMatch == true)
                         {
+                            iMin = i;
                             iMax = i;
+                            firstMatch = false;
+                        }
+                        else
+                        {
+                            if (i > iMax)
+                            {
+                                iMax = i;
+                            }
                         }
                     }
                 }
