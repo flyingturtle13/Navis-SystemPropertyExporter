@@ -387,6 +387,7 @@ namespace SystemPropertyExporter
 
         private void OkBtn_Click(object sender, RoutedEventArgs e)
         {
+            ExportProperties.Idx = 0;
             ExportProperties.ProcessModelsSelected();
             GetPropertiesModel.ModelList.Clear();
             ExportProperties.ExportItems.Clear();
@@ -394,7 +395,7 @@ namespace SystemPropertyExporter
             ExportProperties.ExportProp.Clear();
             ExportProperties.ExportVal.Clear();
             ExportProperties.ItemIdx.Clear();
-            ExportProperties.Idx = 0;
+            //ExportProperties.Idx = 0;
             this.Close();
         }
 

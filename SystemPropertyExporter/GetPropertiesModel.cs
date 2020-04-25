@@ -73,7 +73,7 @@ namespace SystemPropertyExporter
                 _returnCategories = value;
             }
         }
-        
+        public static List<string> catDuplicate = new List<string>();
         public static ModelItem Root { get; set; }
         
 
@@ -88,6 +88,7 @@ namespace SystemPropertyExporter
             ReturnProp.Clear();
             CurrCategories.Clear();
             ReturnCategories.Clear();
+            catDuplicate.Clear();
             
             //CHECK IF FILE IS NWF
             foreach (Model model in DocModel)
@@ -111,7 +112,7 @@ namespace SystemPropertyExporter
                         if (item.DisplayName == displayName)
                         {
                             ClassTypeCheck(item, classType);
-                            continue;
+                            //continue;
                         }
                     }
                 }
@@ -131,7 +132,7 @@ namespace SystemPropertyExporter
                        if (subItem1.ClassDisplayName == classType)
                        {
                             CategoryTypes(subItem1);
-                            return 0;
+                            //return 0;
                        }
                        break;
 
@@ -139,7 +140,7 @@ namespace SystemPropertyExporter
                         if (subItem1.ClassDisplayName == classType || subItem1.IsLayer == true)
                         {
                             CategoryTypes(subItem1);
-                            return 0;
+                            //return 0;
                         }
                         break;
 
@@ -147,8 +148,18 @@ namespace SystemPropertyExporter
                         if (subItem1.ClassDisplayName == classType || subItem1.IsComposite == true)
                         {
                              CategoryTypes(subItem1);
-                             return 0;
+                             //return 0;
                         }
+                        //else if (subItem1.IsLayer == true)
+                        //{
+                        //    foreach (ModelItem obj in subItem1.Children)
+                        //    {
+                        //        if (obj.IsInsert == false && obj.IsComposite == false && obj.IsCollection == false && obj.ClassDisplayName != "Block")
+                        //        {
+                        //            CategoryTypes(subItem1);
+                        //        }
+                        //    }
+                        //}
                         break;
                 }
             }
@@ -162,14 +173,42 @@ namespace SystemPropertyExporter
         {
             foreach (PropertyCategory oPC in item.PropertyCategories)
             {
+                // list.contains ()
+
+                //if (ReturnCategories.Count > 0)
+                //{
+                //    var catList = ReturnCategories.ToList();
+                //    foreach (Category cat in catList)
+                //    {
+                //    //MessageBox.Show(oPC.DisplayName);
+                //    //MessageBox.Show(cat.CatName);
+                //    if (oPC.DisplayName != cat.CatName)
+                //    {
+                //        CurrCategories.Add(oPC);
+                //        ReturnCategories.Add(new Category
+                //        {
+                //            CatName = oPC.DisplayName
+                //        });
+                //    }
+                //    }
+                //}
+                //else
+                //{
+                if (!catDuplicate.Contains(oPC.DisplayName))
+                {
+                    CurrCategories.Add(oPC);
+                    catDuplicate.Add(oPC.DisplayName);
+                    ReturnCategories.Add(new Category
+                    {
+                        CatName = oPC.DisplayName
+                    });
+                }
+                    
+                //}
+                
                 //STORES IN ReturnCategories TO DISPLAY AVAILABLE CATEGORIES IN UserInput FORM IN CatProp_ListView
                 //CurrCategories STORES CATEGORIES AS PropertyCategory (Navis API) TYPE
                 //THIS WILL BE ACCESSED IN STEP 2 (GetCatProperties()) AFTER USER HAS SELECTED WHICH CATEGORY TO ACCESS
-                CurrCategories.Add(oPC);
-                ReturnCategories.Add(new Category
-                {
-                    CatName = oPC.DisplayName
-                });
             }
         }
 
