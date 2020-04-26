@@ -1,6 +1,5 @@
 # Navisworks Model System Property Exporter
-User selects which discipline/system properties (per hierarchy level) to export to Excel.
-The ultimate goal of these tools and workflow is to improve MEP BIM coordination communication with project teams.  The Navisworks add-in provides a means to automate clash metrics progress reporting,  visualize clash data, and make model data meaningful and accessible for various project stakeholders. This workflow requires Autodesk Navisworks Manage, Microsoft Power BI, and Navisworks API to access the desired Clash Detective data for exporting.  The tools and workflow are designed to have Navisworks Manage coupled with Microsoft Power BI to deliver multiple interactive visual reports in Power BI.  However, this respository focuses on the Navisworks API add-in.  The included Power BI template is only for reference and testing.
+The ultimate goal of these tools and workflow is to improve MEP BIM coordination communication and federated model access with project teams.  The Navisworks add-in allows the user to select which discipline/system properties (per hierarchy level) is exported to an Excel spreadsheet for data interoperability.  The properties available to export are the same available in the "Properties" window.  The primary purpose is to send the system properties to Forge model viewer to create a 3D model metrics dashbaord to permit users to access system data, quantities, and statuses.  This workflow requires Autodesk Navisworks (Manage, Simulate, Freedom) 2019, Navisworks API to access model data for exporting and Forge model viewer.  However, this respository focuses on the Navisworks API and add-in only.
 
 ## Getting Started
 Environment setup regarding application development logistics.
@@ -23,14 +22,14 @@ Environment setup regarding application development logistics.
     - Autodesk.Navisworks.Automation
     - Autodesk.Navisworks.Clash
     - navisworks.gui.roamer
+    - AdWindows
   * Microsoft.Office.Interop.Excel
 
 ## Application Development
 Application features and specs for Navisworks Manage add-in
 
 * Software Required
-  - Navisworks Manage 2019
-  - Microsoft Power BI
+  - Navisworks 2019 (Manage, Simulate, Freedom)
   
 * Navisworks Model Preparation & Clash Detective Setup Requirements
   - Models appended need to be solids (not polymesh)
