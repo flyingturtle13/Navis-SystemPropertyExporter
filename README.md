@@ -1,4 +1,4 @@
-# Navisworks Model System Property Exporter
+# Navisworks Building System Property Exporter
 The ultimate goal of these tools and workflow is to improve MEP BIM coordination communication and federated model access with project teams.  The Navisworks add-in allows the user to select which discipline/system properties (per hierarchy level) is exported to an Excel spreadsheet for data interoperability.  The properties available to export are the same available in the "Properties" window.  The primary purpose is to send the system properties to Forge model viewer to create a 3D model metrics dashbaord to permit users to access system data, quantities, and statuses.  This workflow requires Autodesk Navisworks (Manage, Simulate, Freedom) 2019, Navisworks API to access model data for exporting and Forge model viewer.  However, this respository focuses on the Navisworks API and add-in only.
 
 ## Getting Started
