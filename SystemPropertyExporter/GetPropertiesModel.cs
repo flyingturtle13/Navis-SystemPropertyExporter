@@ -16,6 +16,7 @@ namespace SystemPropertyExporter
 {
     class GetPropertiesModel
     {
+        //GLOBAL PARAMETERS - ALLOWS ACCESS FROM OTHER CLASSES WITHIN APPLICATION//
         public static DocumentModels DocModel { get; set; }
 
         public static List<PropertyCategory> CurrCategories = new List<PropertyCategory>();
@@ -73,8 +74,9 @@ namespace SystemPropertyExporter
                 _returnCategories = value;
             }
         }
+
+        //REQUIRES TO BE GLOBAL SINCE A RUNNING COLLECTION IS NEEDED AS CYCLES THROUGH ALL MODEL ITEMS
         public static List<string> catDuplicate = new List<string>();
-        public static ModelItem Root { get; set; }
         
 
         //---------------------------------------------------------------------------------------
@@ -89,7 +91,8 @@ namespace SystemPropertyExporter
             CurrCategories.Clear();
             ReturnCategories.Clear();
             catDuplicate.Clear();
-            
+            ModelItem Root = null;
+
             //CHECK IF FILE IS NWF
             foreach (Model model in DocModel)
             {
@@ -120,9 +123,11 @@ namespace SystemPropertyExporter
 
 
         //DETERMINES WHAT HIERARCHY LEVEL TO ACCESS PROPERTIES
-        //BASED ON USER INPUT (classType - File, Layer, or Block).  DIRECTION FROM GetSystemProperties Method.
-        private static int ClassTypeCheck(ModelItem item, string classType) {
+        //BASED ON USER INPUT (classType - BUILDING SYSTEM (File), SYSTEM PARTS (Layer), or INDIVIDUAL COMPONENETS (Block)).  
+        //DIRECTION FROM GetSystemProperties Method.
+        private static void ClassTypeCheck(ModelItem item, string classType) {
 
+            //WILL LOOP THROUGH SELECTED FILE AND ALL SUB GEOMTRY ITEMS USING DescendantsAndSelf PROPERTY
             foreach (ModelItem subItem1 in item.DescendantsAndSelf)
             {
                 switch (classType)
@@ -135,79 +140,83 @@ namespace SystemPropertyExporter
                        break;
 
                     case "Layer":
+                        //CHECK CONDITION IF MODEL AS EXPORTED FROM AUTOCAD
+                        //IN THIS CASE, MODEL ITEM IS OF TYPE LAYER
                         if (subItem1.ClassDisplayName == classType || subItem1.IsLayer == true)
                         {
+                            bool validLayer = false;
+
                             foreach(ModelItem obj in subItem1.Children)
-                                {
+                            {
                                 if (obj.IsCollection == false)
                                 {
-                                    CategoryTypes(subItem1);
+                                    validLayer = true;
+                                    break;
                                 }
                             }
+
+                            if (validLayer == true)
+                            {
+                                CategoryTypes(subItem1);
+                            }
                         }
+                        //CHECKS CONDITION WHEN MODEL IS EXPORTED FROM REVIT
+                        //IN THIS CASE, REFER TO COLLECTION IF PARENT IS COLLECTION BUT CHILDREN ARE OF DIFFERENT TYPE
+                        //(E.G. COMPOSITE, INSERT, GEOMETRY, ETC.)
                         else if (subItem1.IsCollection == true && subItem1.Parent.IsCollection == true)
                         {
+                            bool validCollection = false;
+
                             foreach (ModelItem obj in subItem1.Children)
                             {
                                 if (obj.IsCollection == false)
                                 {
-                                    CategoryTypes(subItem1);
+                                    validCollection = true;
+                                    break;
                                 }
+                            }
+
+                            if (validCollection == true)
+                            {
+                                CategoryTypes(subItem1);
                             }
                         }
                         break;
 
                     case "Block":
+
+                        //CHECK CONDITION IF MODEL WAS EXPORTED FROM REVIT
+                        //IN THIS CASE, MODEL ITEM CLASS TYPE WILL BE BLOCK OR COMPOSITE
                         if (subItem1.ClassDisplayName == classType || subItem1.IsComposite == true)
                         {
                              CategoryTypes(subItem1);
                         }
-                        //else if (subItem1.IsLayer == true)
-                        //{
-                        //    foreach (ModelItem obj in subItem1.Children)
-                        //    {
-                        //        if (obj.IsInsert == false && obj.IsComposite == false && obj.IsCollection == false && obj.ClassDisplayName != "Block")
-                        //        {
-                        //            CategoryTypes(subItem1);
-                        //        }
-                        //    }
-                        //}
+                        //CHECK CONDITION IF MODEL WAS EXPORTED FROM AUTOCAD
+                        //IN THIS CASE, MODEL ITEM IS OF TYPE GEOMETRY DIRECT SUB TO LAYER SO CHECKS IF PARENT IS LAYER
+                        //AND RULES OUT OTHER TYPES.
+                        else if (subItem1.Parent.IsLayer == true && subItem1.IsInsert == false && subItem1.IsComposite == false && subItem1.IsCollection == false && subItem1.ClassDisplayName != "Block")
+                        {
+                            CategoryTypes(subItem1);
+                        }
                         break;
                 }
             }
-            return 0;
         }
 
 
-        //ROUTED TO ACCESS MODEL ITEM ASSOCIATED CATEGORY TYPES AFTER HIEARCHY LEVEL DETAIL(classType)
-        //MATCHED
+        //ROUTED TO ACCESS MODEL ITEM ASSOCIATED CATEGORY TYPES AFTER HIEARCHY LEVEL DETAIL(classType) MATCHED
         private static void CategoryTypes(ModelItem item)
         {
+            //CYCLES THROUGH ALL AVAILABLE CATEGORIES PER MODEL ITEM
             foreach (PropertyCategory oPC in item.PropertyCategories)
             {
-                // list.contains ()
-
-                //if (ReturnCategories.Count > 0)
-                //{
-                //    var catList = ReturnCategories.ToList();
-                //    foreach (Category cat in catList)
-                //    {
-                //    //MessageBox.Show(oPC.DisplayName);
-                //    //MessageBox.Show(cat.CatName);
-                //    if (oPC.DisplayName != cat.CatName)
-                //    {
-                //        CurrCategories.Add(oPC);
-                //        ReturnCategories.Add(new Category
-                //        {
-                //            CatName = oPC.DisplayName
-                //        });
-                //    }
-                //    }
-                //}
-                //else
-                //{
+                //MAKES A SINGLE COLLECTION OF AVAILABLE CATEGORIES
+                //CHECKS TO PREVENT DUPLICATES OF CATEGORIES
                 if (!catDuplicate.Contains(oPC.DisplayName))
-                {
+                {   
+                    //STORES IN ReturnCategories TO DISPLAY AVAILABLE CATEGORIES IN UserInput FORM IN CatProp_ListView
+                    //CurrCategories STORES CATEGORIES AS PropertyCategory (Navis API) TYPE
+                    //THIS WILL BE ACCESSED IN STEP 2 (GetCatProperties()) AFTER USER HAS SELECTED WHICH CATEGORY TO ACCESS
                     CurrCategories.Add(oPC);
                     catDuplicate.Add(oPC.DisplayName);
                     ReturnCategories.Add(new Category
@@ -215,12 +224,8 @@ namespace SystemPropertyExporter
                         CatName = oPC.DisplayName
                     });
                 }
-                    
-                //}
                 
-                //STORES IN ReturnCategories TO DISPLAY AVAILABLE CATEGORIES IN UserInput FORM IN CatProp_ListView
-                //CurrCategories STORES CATEGORIES AS PropertyCategory (Navis API) TYPE
-                //THIS WILL BE ACCESSED IN STEP 2 (GetCatProperties()) AFTER USER HAS SELECTED WHICH CATEGORY TO ACCESS
+                
             }
         }
 
@@ -230,11 +235,14 @@ namespace SystemPropertyExporter
         //SELECTED CATEGORY IS PASSED AS CatNameSelected
         public static void GetCatProperties(string CatNameSelected)
         {
+            //CYCLES THROUGH CATEGORY OF CLASS PropertyCategory
+            //TO FIND MATCH THAT USER SELECTED OF TYPE STRING
             foreach (PropertyCategory category in CurrCategories)
             {
-
                 if (category.DisplayName == CatNameSelected)
                 {
+                    //WHEN MATCH FOUND TAKES category OF CLASS PropertyCategory
+                    //TO RETRIEVE AVAILABLE Properties
                     foreach (DataProperty oDP in category.Properties)
                     {
                         //STORES IN ReturnProp TO BE DISPLAYED IN UserInput FORM IN Prop_ListView
@@ -251,7 +259,7 @@ namespace SystemPropertyExporter
         }
 
 
-        //ROUTED FROM StarMain TO STORE PROJECT MODELS IN modelList LIST 
+        //ROUTED FROM StarMain TO STORE PROJECT MODELS IN ModelList LIST 
         //TO BE DISPLAYED IN UserInput USING Models_ComboBox
         public static void GetCurrModels()
         {
@@ -272,12 +280,14 @@ namespace SystemPropertyExporter
     }
     
 
+    //CLASS BINDING CONTAINER FOR ReturnCategories Observable Collection
     public class Category
     {
         public string CatName { get; set; }
     }
 
 
+    //CLASS BINDING CONTAINER FOR ReturnProp Observable Collection
     public class Property
     {
         public string PropName { get; set; }

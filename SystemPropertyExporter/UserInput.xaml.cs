@@ -29,26 +29,22 @@ namespace SystemPropertyExporter
         {
             InitializeComponent();
 
-            //Makes models loaded in project (Selection Tree) visible to User in Models List View
-            try
+            //MAKES MODELS LOADED IN PROJECT (NAVISWORKS SELECTION TREE) VISIBLE TO USER IN PROJECT MODELS ComboBox
+            if (Start.FirstOpen == true)
             {
-                if (Start.FirstOpen == true)
-                {
-                    Models_ComBox.ItemsSource = GetPropertiesModel.ModelList;
-                    Start.FirstOpen = false;
-                }
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show("Error! Original Message: " + exception.Message);
+                Models_ComBox.ItemsSource = GetPropertiesModel.ModelList;
+                Start.FirstOpen = false;
             }
         }
 
 
-        //--------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------------------------
 
 
-        //MODEL FILES COMBO BOX - USER TO INITIALLY SELECT//
+        //MODEL FILES COMBO BOX - USER TO INITIALLY SELECT SPECIFIC HIERARCHY LEVEL//
+        //WHEN NEW SELECTION MADE IN RADIO BUTTON GROUP, RETRIEVES AVAILABLE CATEGORIES (GetProertiesModel.cs)
+        //& RELOADS IN CatProp_LISTVIEW
+        //USES OBSERVABLE COLLECTION PROPERTIES.
         private void ModelCB_Select(object sender, SelectionChangedEventArgs e)
         {
             if (SystemRB.IsChecked == true && Models_ComBox.SelectedItem != null)
@@ -73,19 +69,13 @@ namespace SystemPropertyExporter
         //GROUP NAME = HIERARCHY//
         private void SystemRB_Checked(object sender, RoutedEventArgs e)
         {
-            try
+            //MUST CHECK IF USER HAS SELECTED A MODEL FROM Models_ComBox TO
+            //DETERMINE IF CATEGORIES SHOULD BE RETRIEVED FROM GetPropertiesModel.GetSystemProperties
+            if (Models_ComBox.SelectedItem != null)
             {
-                if (Models_ComBox.SelectedItem != null)
-                {
-                    ExportProperties.Selected_HierLvl = 1;
-                    GetPropertiesModel.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "File");
-                    CatProp_ListView.ItemsSource = GetPropertiesModel.ReturnCategories;
-                }
-
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show("Error! Original Message: " + exception.Message);
+                ExportProperties.Selected_HierLvl = 1;
+                GetPropertiesModel.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "File");
+                CatProp_ListView.ItemsSource = GetPropertiesModel.ReturnCategories;
             }
         }
 
@@ -94,18 +84,13 @@ namespace SystemPropertyExporter
         //GROUP NAME = HIERARCHY//
         private void CatRB_Checked(object sender, RoutedEventArgs e)
         {
-            try
+            //MUST CHECK IF USER HAS SELECTED A MODEL FROM Models_ComBox TO
+            //DETERMINE IF CATEGORIES SHOULD BE RETRIEVED FROM GetPropertiesModel.GetSystemProperties
+            if (Models_ComBox.SelectedItem != null)
             {
-                if (Models_ComBox.SelectedItem != null)
-                {
-                    ExportProperties.Selected_HierLvl = 2;
-                    GetPropertiesModel.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "Layer");
-                    CatProp_ListView.ItemsSource = GetPropertiesModel.ReturnCategories;
-                }
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show("Error! Original Message: " + exception.Message);
+                ExportProperties.Selected_HierLvl = 2;
+                GetPropertiesModel.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "Layer");
+                CatProp_ListView.ItemsSource = GetPropertiesModel.ReturnCategories;
             }
         }
 
@@ -114,25 +99,22 @@ namespace SystemPropertyExporter
         //GROUP NAME = HIERARCHY//
         private void ComponentRB_Checked(object sender, RoutedEventArgs e)
         {
-            try
+            //MUST CHECK IF USER HAS SELECTED A MODEL FROM Models_ComBox TO
+            //DETERMINE IF CATEGORIES SHOULD BE RETRIEVED FROM GetPropertiesModel.GetSystemProperties
+            if (Models_ComBox.SelectedItem != null)
             {
-                if (Models_ComBox.SelectedItem != null)
-                {
-                    ExportProperties.Selected_HierLvl = 3;
-                    GetPropertiesModel.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "Block");
-                    CatProp_ListView.ItemsSource = GetPropertiesModel.ReturnCategories;
-                }
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show("Error! Original Message: " + exception.Message);
+                ExportProperties.Selected_HierLvl = 3;
+                GetPropertiesModel.GetSystemProperties(Models_ComBox.SelectedItem.ToString(), "Block");
+                CatProp_ListView.ItemsSource = GetPropertiesModel.ReturnCategories;
             }
         }
 
 
-        //DISCIPLINE NAME TEXT BOX - USER TO INITIALLY SELECT//
+        //DISCIPLINE NAME TEXT BOX - USER TO INITIALLY INPUT//
         private void Dis_KeyDn(object sender, KeyEventArgs e)
         {
+            //IF DEFAULT TEXT IN TEXT BOX, WILL CLEAR DEFAULT TEXT
+            //TO ACCOMODATE USER INPUT WHEN SELECTED
             if (Dis_TB.Text == "INPUT DISCIPLINE MODEL")
             {
                 Dis_TB.Text = "";
@@ -141,8 +123,11 @@ namespace SystemPropertyExporter
         }
 
 
+        //DISCIPLINE NAME TEXT BOX - USER TO INITIALLY INPUT//
         private void Dis_GotFocus(object sender, RoutedEventArgs e)
         {
+            //IF DEFAULT TEXT IN TEXT BOX, WILL CLEAR DEFAULT TEXT
+            //TO ACCOMODATE USER INPUT WHEN SELECTED
             if (Dis_TB.Text == "INPUT DISCIPLINE MODEL")
             {
                 Dis_TB.Text = "";
@@ -151,8 +136,10 @@ namespace SystemPropertyExporter
         }
 
 
+        //IF USER DESELECTS TEXT BOX, INITIATES METHOD
         private void Dis_LostFocus(object sender, RoutedEventArgs e)
         {
+            //IF USER LEAVES TEXT BOX BLANK, WILL RE-DISPLAY DEFAULT INSTRUCTION TEXT
             if (Dis_TB.Text == "")
             {
                 Dis_TB.Text = "INPUT DISCIPLINE MODEL";
@@ -164,29 +151,24 @@ namespace SystemPropertyExporter
         //CATEGORY LISTVIEW - USER TO INITIALLY SELECT//
         private void PropCat_Selection(object sender, SelectionChangedEventArgs e)
         {
-            try
-            {
-                //check previous selection is not same as current selection
-                GetPropertiesModel.ReturnProp.Clear();
+            //CHECK PREVIOUS SELECTION IS NOT SAME AS CURRENT SELECTION
+            GetPropertiesModel.ReturnProp.Clear();
 
-                //UPDATES AVAILABLE PROPERTIES WHEN CATEGORY SELECTED IN CatProp_ListView
-                var selectedCat = CatProp_ListView.SelectedItem as Category;
-                if (selectedCat != null)  //INITIATES PROPERTIES RETRIEVEL WHEN CATEGORY SELECTED (CONTAINER NOT EMPTY)
-                {
-                    GetPropertiesModel.GetCatProperties(selectedCat.CatName);
-                    ExportProperties.Selected_Cat = selectedCat.CatName;
-                    Prop_ListView.ItemsSource = GetPropertiesModel.ReturnProp;
-                }
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show("Error! Original Message: " + exception.Message);
-            }
+            //UPDATES AVAILABLE PROPERTIES WHEN CATEGORY SELECTED IN CatProp_ListView
+            var selectedCat = CatProp_ListView.SelectedItem as Category;
 
+            if (selectedCat != null)  //INITIATES PROPERTIES RETRIEVEL WHEN CATEGORY SELECTED (CONTAINER NOT EMPTY)
+                                      //OTHERWISE UPDATES CATEGORIES SINCE NO SelectedItem IS BOUND
+            {
+                //RESPECTS OBSERVABLE COLLECTION PROPERTIES
+                GetPropertiesModel.GetCatProperties(selectedCat.CatName); //TAKES USER SELECTED CATEGORY TO RETRIEVE PROPERTIES
+                ExportProperties.Selected_Cat = selectedCat.CatName;
+                Prop_ListView.ItemsSource = GetPropertiesModel.ReturnProp;
+            }
         }
 
 
-        //-------------------------------------------------------------------------------
+        //---------------------------------------------------------------------------------------------------------------------
 
 
         //ADD BUTTON - QUEUES USER MODEL PROPERTIES FOR EXPORT
@@ -198,7 +180,7 @@ namespace SystemPropertyExporter
             int ui4;
             bool duplicate = false;
 
-            //Need to prevent item from being added if duplicate
+            //CHECKS THAT MODELSELECTED_LISTVIEW IS NOT EMPTY
             if (Dis_TB.Text == "INPUT DISCIPLINE MODEL" || Models_ComBox.Text == "SELECT MODEL"
                     || ExportProperties.Selected_Cat == null || ExportProperties.Selected_HierLvl < 1 
                     || ExportProperties.Selected_HierLvl > 3)
@@ -207,21 +189,22 @@ namespace SystemPropertyExporter
             }
             else
             {
-                //CHECKS THAT MODELSELECTED_LISTVIEW IS NOT EMPTY
+                //PREVENTS ITEM FROM BEING ADDED IF ALREADY EXISTS IN LIST(PREVENTS DUPLICATES FROM BEING ADDED TO LIST)
+                
+                //FIRST, CONFIRMS EXPORT LIST IS NOT NULL
                 if (ModelsSelected_ListView != null)
                 {
                     //OBSERVABLE COLLECTION (UserItems) BOUND TO ModelSelected_Listview
-                    //EDITABLE LIST
+                    //CREATES EDITABLE LIST THAT CAN BE MANIPULATED
                     var cUserItems = ModelsSelected_ListView.Items.Cast<object>().ToList();
+
+                    //CHECKS IF NEW INPUT WILL BE A DUPLICATE
                     foreach (Selected combo in cUserItems)
                     {
                         ui1 = combo.Discipline.IndexOf(Dis_TB.Text);
                         ui2 = combo.ModFile.IndexOf(Models_ComBox.Text);
                         ui3 = combo.HierLvl.IndexOf(ExportProperties.Selected_HierLvl.ToString());
                         ui4 = combo.SelectCat.IndexOf(ExportProperties.Selected_Cat);
-
-                            //MessageBox.Show($"{combo.Discipline},{combo.ModFile},{combo.HierLvl},{combo.SelectCat}");
-                            //MessageBox.Show($"{ui1},{ui2},{ui3},{ui4}");
 
                         if (ui1 == ui2 && ui2 == ui3 && ui3 == ui4)
                         {
@@ -230,8 +213,13 @@ namespace SystemPropertyExporter
                             break;
                         }
                     }
-                } 
+                }
+                else
+                {
+                    MessageBox.Show("Must add items to list to export properties.");
+                }
 
+                //IF PASSES DUPLICATES TEST, USER INPUTS ARE ADDED TO TEMPORARY ITEMS EXPORT QUEUE LIST CONTAINER (UserItems)
                 if (duplicate == false)
                 {
                     ExportProperties.UserItems.Add(new Selected
@@ -242,10 +230,10 @@ namespace SystemPropertyExporter
                         SelectCat = ExportProperties.Selected_Cat
                     });
 
-                    //DISPLAY USER SELECTION IN MODELSSELECTED_LISTVIEW
+                    //DISPLAYS UPDATED USER SELECTION FOR EXPORT IN MODELSSELECTED_LISTVIEW
                     ModelsSelected_ListView.ItemsSource = ExportProperties.UserItems;
 
-                    //RESET SLECTION AND USER INPUTS
+                    //RESETS SLECTION AND USER INPUTS
                     GetPropertiesModel.ReturnCategories.Clear();
                     GetPropertiesModel.ReturnProp.Clear();
                     ExportProperties.Selected_Cat = null;
@@ -257,6 +245,7 @@ namespace SystemPropertyExporter
         }
         
 
+        //RESET BUTTON - CLEARS ANY USER INPUT MANIPULATION TO DEFAULT WHEN APP ORIGINALLY OPEN//
         private void ResetBtn_Click(object sender, RoutedEventArgs e)
         {   
             GetPropertiesModel.ReturnCategories.Clear();
@@ -268,23 +257,28 @@ namespace SystemPropertyExporter
 
 
         //SAVE BUTTON - ABILITY TO SAVE USER LIST SO DOES NOT HAVE TO BE
-        //RECREATED FOR FUTURE USE.
+        //RECREATED FOR FUTURE RE-EXPORTING ACTIVITIES.
         private void SaveList_Click(object sender, RoutedEventArgs e)
         {
+            //CREATES NEW VARIABLE INSTANCE - ALLOWS TO OPEN WINDOWS EXPLORER SAVE FILE PROMPT
             string filename = "";
             SaveFileDialog saveList = new SaveFileDialog();
 
+            //SETS FILE TYPE TO BE SAVED AS .TXT
             saveList.Title = "Save to...";
             saveList.Filter = "Text Documents | *.txt";
 
+            //OPENS WINDOWS EXPLORER TO BEGIN LIST SAVE PROCESS
             if (saveList.ShowDialog() == true)
             {
                 filename = saveList.FileName.ToString();
 
+                //CHECKS USER HAS INPUTED A NAME FOR THE FILE
                 if (filename != "")
                 {
                     using (StreamWriter sw = new StreamWriter(filename))
                     {
+                        //POPULATES TXT FILE WITH LIST ITEMS SEPARATED BY "--" USING StreamWriter & CLOSES WHEN COMPLETE
                         var selected = ModelsSelected_ListView.ItemsSource.Cast<object>().ToList();
                         foreach (Selected item in selected)
                         {
@@ -303,28 +297,35 @@ namespace SystemPropertyExporter
         
 
         //LOAD LIST BUTTON - ABILITY TO LOAD A PREVIOUSLY SAVED LIST
-        //SO USER LIST DOES NOT HAVE TO BE RECREATED.
+        //SO USER LIST DOES NOT HAVE TO BE RECREATED MANUALLY.
         private void LoadList_Click(object sender, RoutedEventArgs e)
         {
+            //CREATES NEW VARIABLE INSTANCE - ALLOWS TO OPEN WINDOWS EXPLORER OPEN A FILE
             string filename = "";
             OpenFileDialog loadList = new OpenFileDialog();
 
+            //SETS FILE TYPE THAT CAN BE OPENED (.TXT)
             loadList.Title = "Open File";
             loadList.Filter = "Text Documents | *.txt";
-
+            
+            //OPENS WINDOWS EXPLORER TO BEGIN LIST OPEN FILE PROCESS
             if (loadList.ShowDialog() == true)
             {
                 try
                 {
+                    //CLEARS ANY PREVIOUS ITEMS ADDED TO TEMPORARY LIST CONTAINER FOR EXPORT
                     ExportProperties.UserItems.Clear();
 
+                    //BEGINS READING .TXT FILE 
                     filename = loadList.FileName.ToString();
                     var fileLines = File.ReadAllLines(filename);
 
                     int i = 0;
 
+                    //READS TXT FILE LINE BY LINE 
                     foreach (String line in fileLines)
                     {
+                        //IF "--" IS READ, WILL ADD A NEW ROW OF ASSOCIATED INPUTS TO UserItems TEMPORARY CONTAINER LIST TO BE DISPLAYED
                         if (line == "--")
                         {
                             ExportProperties.UserItems.Add( new Selected
@@ -339,6 +340,7 @@ namespace SystemPropertyExporter
                         i++;
                     }
 
+                    //DISPLAYS ADDED ITEMS IN UI
                     ModelsSelected_ListView.ItemsSource = ExportProperties.UserItems;
                 }
                 catch (Exception x)
@@ -353,38 +355,26 @@ namespace SystemPropertyExporter
         //USER MUST SELECT ONE OR MULTIPLE ITEMS TO BE REMOVED.
         private void RemoveBtn_Click(object sender, RoutedEventArgs e)
         {
-            try
+            //OBSERVABLE COLLECTION (UserItems) BOUND TO ModelSelected_ListView
+            //CREATES A COPY SO LIST CAN BE ITERATED OVER AND ISOLATE/SELECT AN ITEM
+            var selected = ModelsSelected_ListView.SelectedItems.Cast<object>().ToList();
+            foreach(Selected item in selected)
             {
-                //Observable Collection (UserItems) bound to ModelSelected_Listview
-                //Editable List 
-                var selected = ModelsSelected_ListView.SelectedItems.Cast<object>().ToList();
-                foreach(Selected item in selected)
-                {
-                    ExportProperties.UserItems.Remove(item);
-                }
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show("Error! Original Message: " + exception.Message);
+                ExportProperties.UserItems.Remove(item);
             }
         }
 
 
+        //CANCEL BUTTON - CLOSES APPLICATION WITHOUT PERFORMING EXPORT PROCESS//
         private void CancelBtn_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                GetPropertiesModel.ModelList.Clear();
-                ExportProperties.Idx = 0;
-                this.Close();
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show("Error! Original Message: " + exception.Message);
-            }
+            GetPropertiesModel.ModelList.Clear();
+            ExportProperties.Idx = 0;
+            this.Close();
         }
 
 
+        //OK BUTTON - EXECUTES EXPORT PROCESS AND CLOSES APP AUTOMATICALLY WHEN COMPLETE//
         private void OkBtn_Click(object sender, RoutedEventArgs e)
         {
             //DIRECT TO ExportProperties CLASS FOR SEARCHING AND STORING DESIRED
@@ -402,7 +392,7 @@ namespace SystemPropertyExporter
             ExportProperties.ExportVal.Clear();
             ExportProperties.ItemIdx.Clear();
 
-            //TERMINATES PLUG-IN AND CLOSES WINDOW
+            //TERMINATES ADD-IN AND CLOSES WINDOW
             this.Close();
         }
 
