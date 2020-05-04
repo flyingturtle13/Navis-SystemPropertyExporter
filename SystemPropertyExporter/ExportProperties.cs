@@ -81,8 +81,6 @@ namespace SystemPropertyExporter
 
         public static string UserExportCat { get; set; }
 
-        //public static int Cnt;
-
 
         //-----------------------------------------------------------------------
         
@@ -134,6 +132,8 @@ namespace SystemPropertyExporter
                 }
             }
 
+            //DIRECT TO WriteToExcel CLASS 
+            //- EXPORT DESIRED PROPERTIES AND VALUES
             WriteToExcel.ExcelReport();
         }
 
@@ -169,21 +169,35 @@ namespace SystemPropertyExporter
 
                             if (subItem1.ClassDisplayName == type || subItem1.IsLayer == true)
                             {
-                                //foreach (ModelItem obj in subItem1.Children)
-                                //{
-                                //    if (obj.IsInsert == false && obj.IsComposite == false && obj.IsCollection == false && obj.ClassDisplayName != "Block")
-                                //    {
-                                //        continue;
-                                //    }
-                                //    else
-                                //    {
-                                        //MessageBox.Show(subItem1.ClassDisplayName + ", " + subItem1.DisplayName);
+                                foreach (ModelItem obj in subItem1.Children)
+                                {
+                                    if (obj.IsCollection == false)
+                                    {
                                         CurrExportCat = UserExportCat;
                                         CurrEleName = subItem1.DisplayName;
                                         CurrGuid = subItem1.InstanceGuid.ToString();
                                         CategoryTypes_Export(subItem1);
-                                //    }
-                                //}
+                                    }
+                                }
+                                //MessageBox.Show(subItem1.ClassDisplayName + ", " + subItem1.DisplayName);
+                                //CurrExportCat = UserExportCat;
+                                //        CurrEleName = subItem1.DisplayName;
+                                //        CurrGuid = subItem1.InstanceGuid.ToString();
+                                //        CategoryTypes_Export(subItem1);
+
+                            }
+                            else if (subItem1.IsCollection == true && subItem1.Parent.IsCollection == true)
+                            {
+                                foreach (ModelItem obj in subItem1.Children)
+                                {
+                                    if (obj.IsCollection == false)
+                                    {
+                                        CurrExportCat = UserExportCat;
+                                        CurrEleName = subItem1.DisplayName;
+                                        CurrGuid = subItem1.InstanceGuid.ToString();
+                                        CategoryTypes_Export(subItem1);
+                                    }
+                                }
                             }
                             break;
 
@@ -193,7 +207,6 @@ namespace SystemPropertyExporter
                             
                             if ((subItem1.ClassDisplayName == type || subItem1.IsComposite == true) && subItem1.IsInsert == false)
                             {
-                                //MessageBox.Show(subItem1.ClassDisplayName + ", " + subItem1.DisplayName);
                                 CurrExportCat = UserExportCat;
                                 CurrEleName = subItem1.DisplayName;
                                 CurrGuid = subItem1.InstanceGuid.ToString();
@@ -217,8 +230,8 @@ namespace SystemPropertyExporter
         }
 
 
-        //ROUTED TO ACCESS MODEL ITEM ASSOCIATED CATEGORY TYPES AFTER HIEARCHY LEVEL DETAIL(classType)
-        //MATCHED
+        //ROUTED TO ACCESS MODEL ITEM ASSOCIATED CATEGORY TYPES 
+        //AFTER HIEARCHY LEVEL DETAIL(classType) MATCHED
         private static void CategoryTypes_Export(ModelItem subItem)
         {
             Dictionary<string, PropertyCategory> catAvailable = new Dictionary<string, PropertyCategory>();
@@ -242,7 +255,6 @@ namespace SystemPropertyExporter
                 //2. SEARCH IF DESIRED USER CATEGORY EXISTS FOR MODEL ITEM
                 //PROCEEDS TO OBTAIN PROPERTIES OF CATEGORY
                 //SPECIFIED BY USER IF MATCH FOUND
-                //MessageBox.Show($"{UserExportCat} ---- {CurrExportCat} ---- {catAvailable.ContainsKey(CurrExportCat)}");
                 if (catAvailable.ContainsKey(CurrExportCat))
                 {
                     GetCatProperties_Export(catAvailable[CurrExportCat]);
@@ -251,7 +263,6 @@ namespace SystemPropertyExporter
                 }
                 else if (catAvailable.ContainsKey("Item"))
                 {
-                    //MessageBox.Show("chec 2");
                     //ELEMENT NAME REDIRECT FOR ASSIGNMENT IF INITIAL
                     //ELEMENT NAME FROM 'DisplayName' == null
                     CurrExportCat = "Item";
@@ -279,7 +290,6 @@ namespace SystemPropertyExporter
 
         private static void ElementNameAssignIfEmpty(PropertyCategory category)
         {
-            //bool match = false;
             Dictionary<string, DataProperty> propAvailable = new Dictionary<string, DataProperty>();
 
 
@@ -290,17 +300,14 @@ namespace SystemPropertyExporter
 
             if (propAvailable.ContainsKey("Name"))
             {
-                //MessageBox.Show($"Name - {catAvailable["Name"].Value.ToString().Substring(catAvailable["Name"].Value.ToString().IndexOf(':') + 1)}");
                 CurrEleName = propAvailable["Name"].Value.ToString().Substring(propAvailable["Name"].Value.ToString().IndexOf(':') + 1);
             }
             else if (propAvailable.ContainsKey("Type"))
             {
-                //MessageBox.Show($"Type - {catAvailable["Type"].Value.ToString().Substring(catAvailable["Type"].Value.ToString().IndexOf(':') + 1)}");
                 CurrEleName = propAvailable["Type"].Value.ToString().Substring(propAvailable["Type"].Value.ToString().IndexOf(':') + 1);
             }
             else if (propAvailable.ContainsKey("Layer"))
             {
-                //MessageBox.Show($"Layer - {catAvailable["Layer"].Value.ToString().Substring(catAvailable["Layer"].Value.ToString().IndexOf(':') + 1)}");
                 CurrEleName = propAvailable["Layer"].Value.ToString().Substring(propAvailable["Layer"].Value.ToString().IndexOf(':') + 1);
             }
             else
@@ -310,17 +317,6 @@ namespace SystemPropertyExporter
 
             propAvailable.Clear();
         }
-        ////IN THE CASE WHEN CATEGORY DESIRED DOES NOT EXIST IN CURRENT ELEMENT (SOME ELEMENTS DIFFER IN CATEGOORIES)
-        ////THIS STORES NULL FOR PROPERTIES FOR THE ELEMENT WHEN TYPE OF CATEGORY DOESN'T EXIST.
-        ////Idx LIST FOR ACCOUNTING FOR PROPERTIES ASSOCIATED TO CATEGORY GETS UPDATED TO KEEP CATEGORIES TO PROPERTIES LINKED.
-        //private static  void CatProperties_NoMatch()
-        //{
-        //    ItemIdx.Add(Idx);
-        //    ExportProp.Add("null");
-        //    ExportVal.Add("null");
-
-        //    Idx++;
-        //}
 
 
         //ACCESS AVAILABLE PROPERTIES PER CATEGORY SELECTED BY USER

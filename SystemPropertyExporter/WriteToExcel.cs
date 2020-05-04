@@ -20,23 +20,12 @@ namespace SystemPropertyExporter
 {
     class WriteToExcel
     {
-//        //public static string Curr1 {get; set;}
-        //public static string Curr2 { get; set; }
-        //public static string Curr3 { get; set; }
-        //public static string Curr4 { get; set; }
-        //public static string Curr5 { get; set; }
-        //public static string Curr6 { get; set; }
-//        //public static string Check { get; set; }
         public static int IdxCounter { get; set; }
 
         public static void ExcelReport()
         {
             try
             {
-//MessageBox.Show($"{ExportProperties.ExportItems.Count}, {ExportProperties.ExportItems[0]}, {ExportProperties.ItemIdx.Count}, {ExportProperties.ExportProp.Count}, {ExportProperties.ExportVal.Count}");
-                //MessageBox.Show(ExportProperties.ItemIdx[3796].ToString());
-//                //MessageBox.Show(ExportProperties.ItemIdx[2845].ToString());
-                //Launch or access Excel via COM Interop:
                 Excel.Application xlApp = new Excel.Application();
                 Excel.Workbook xlWorkbook;
 
@@ -58,8 +47,6 @@ namespace SystemPropertyExporter
 
                 foreach (Export item in ExportProperties.ExportItems)
                 {
-                    //MessageBox.Show($"{item.ExpDiscipline}, {item.ExpModFile}, {item.ExpHierLvl}, {item.ExpCategory}");
-                    //Excel.Worksheet xlWorksheet;
                     //TRY NEXT
                     foreach (Excel.Worksheet sheet in xlWorkbook.Worksheets)
                     {
@@ -79,7 +66,6 @@ namespace SystemPropertyExporter
 
                     if (match == false)
                     {
-                        //xlWorksheet = (Excel.Worksheet)xlWorkbook.Worksheets.Add();
                         xlWorksheet = (Excel.Worksheet)xlWorkbook.Sheets[modelIdx + 1];
                         xlWorksheet.Select();
                         xlWorksheet.Activate();
@@ -101,6 +87,7 @@ namespace SystemPropertyExporter
                     //bool first = true;
                     colNum = 7;
 
+                    //2. RECORD VALUES FOR COLUMN HEADERS
                     //write properties to excel file
                     string cellDis = "A" + rowNum.ToString();
                     var rangeDis = xlWorksheet.get_Range(cellDis, cellDis);
@@ -128,26 +115,22 @@ namespace SystemPropertyExporter
 
                     //----------------------------------------------------------------------------------------------
 
+                    //3. ITERATE OVER ExportProp and ExportVal LISTS
+                    //
                     int indexMatch = ExportProperties.ExportItems.IndexOf(item);
                     var currRange = PropRange(indexMatch);
                     int idxMin = currRange.iMin;
                     int idxMax = currRange.iMax;
-//                    // Curr1 = item.ExpDiscipline;
-                    //Curr2 = idxMin.ToString();
-                    //Curr3 = idxMax.ToString();
-                    //Curr4 = indexMatch.ToString();
-//                    //Check = "flag 3";
+
                     for (int i = idxMin; i <= idxMax; i++)
                     {
-                        //var rangeProp = (Excel.Range)xlWorksheet.Cells[1, colNum]; //range using # (int) for column?
-                        //rangeProp.Value2 = "Property - " + ExportProperties.ExportProp[i];
-
                         var rangeVal = (Excel.Range)xlWorksheet.Cells[rowNum, colNum]; //range using # (int) for column?
                         rangeVal.Value2 = $"PROPERTY: {ExportProperties.ExportProp[i]}_____VALUE: {ExportProperties.ExportVal[i]}";
-//                      Check = "flag 5"; 
+                        
                         colNum++;
                     }
-                   
+                    //
+
                     match = false;
                     rowNum++;
                 }
@@ -189,7 +172,6 @@ namespace SystemPropertyExporter
             }
             catch (Exception exception)
             {
-//                MessageBox.Show($"{Curr1}, {Curr2}, {Curr3}, {Curr4}, {Curr5}, {Curr6}, {Check}");
                 MessageBox.Show("Error! Check if clash test(s) exist or previously run.  Original Message: " + exception.Message);
             }
         }
@@ -221,8 +203,6 @@ namespace SystemPropertyExporter
                             }
                         }
                     }
-//                //Curr5 = i.ToString();
-//                //Curr6 = ExportProperties.ItemIdx[67700].ToString();
                 }
             
             return (iMin, iMax);

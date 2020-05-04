@@ -112,7 +112,6 @@ namespace SystemPropertyExporter
                         if (item.DisplayName == displayName)
                         {
                             ClassTypeCheck(item, classType);
-                            //continue;
                         }
                     }
                 }
@@ -132,15 +131,29 @@ namespace SystemPropertyExporter
                        if (subItem1.ClassDisplayName == classType)
                        {
                             CategoryTypes(subItem1);
-                            //return 0;
                        }
                        break;
 
                     case "Layer":
                         if (subItem1.ClassDisplayName == classType || subItem1.IsLayer == true)
                         {
-                            CategoryTypes(subItem1);
-                            //return 0;
+                            foreach(ModelItem obj in subItem1.Children)
+                                {
+                                if (obj.IsCollection == false)
+                                {
+                                    CategoryTypes(subItem1);
+                                }
+                            }
+                        }
+                        else if (subItem1.IsCollection == true && subItem1.Parent.IsCollection == true)
+                        {
+                            foreach (ModelItem obj in subItem1.Children)
+                            {
+                                if (obj.IsCollection == false)
+                                {
+                                    CategoryTypes(subItem1);
+                                }
+                            }
                         }
                         break;
 
@@ -148,7 +161,6 @@ namespace SystemPropertyExporter
                         if (subItem1.ClassDisplayName == classType || subItem1.IsComposite == true)
                         {
                              CategoryTypes(subItem1);
-                             //return 0;
                         }
                         //else if (subItem1.IsLayer == true)
                         //{

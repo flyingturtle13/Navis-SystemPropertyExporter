@@ -78,7 +78,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Label Content="DISCIPLINE" HorizontalAlignment="Left" Margin="37,26,0,0" VerticalAlignment="Top" FontWeight="Bold" Width="238" HorizontalContentAlignment="Center"/>
+        <Label Content="DISCIPLINE / BUILDING SYSTEM" HorizontalAlignment="Left" Margin="37,26,0,0" VerticalAlignment="Top" FontWeight="Bold" Width="238" HorizontalContentAlignment="Center"/>
         <TextBox x:Name="Dis_TB" HorizontalAlignment="Left" Height="23" Margin="36,63,0,0" TextWrapping="Wrap" Text="INPUT DISCIPLINE MODEL" VerticalAlignment="Top" Width="235" FontSize="11" KeyDown="Dis_KeyDn" LostFocus="Dis_LostFocus" Foreground="DarkGray" GotFocus="Dis_GotFocus"/>
         <Line Fill="Black"  X1="50" Y1="333"  X2="750" Y2="333" StrokeThickness="0.75" Stroke="Black" Grid.RowSpan="2"></Line>
         <Button x:Name="SaveList_Btn" Content="Save List" HorizontalAlignment="Left" Margin="132,318.2,0,0" VerticalAlignment="Top" Width="75" Background="#FFF4F4F4" Click="SaveList_Click" Grid.Row="1"/>

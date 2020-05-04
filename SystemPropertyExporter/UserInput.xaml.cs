@@ -387,15 +387,22 @@ namespace SystemPropertyExporter
 
         private void OkBtn_Click(object sender, RoutedEventArgs e)
         {
+            //DIRECT TO ExportProperties CLASS FOR SEARCHING AND STORING DESIRED
+            //CATEGORY, PROPERTIES, AND VALUES.
+            //INITIALIZES Idx TO 0 FOR ASSOCIATING PROPERTIES/VALUES WITH
+            //ITEMS WITH ALL ITEMS FROM UserItems AND ExportItems.
             ExportProperties.Idx = 0;
             ExportProperties.ProcessModelsSelected();
+
+            //RESET LISTS AND OBSERVABLE COLLECTIONS  BEFORE CLOSING PLUG-IN
             GetPropertiesModel.ModelList.Clear();
             ExportProperties.ExportItems.Clear();
             ExportProperties.UserItems.Clear();
             ExportProperties.ExportProp.Clear();
             ExportProperties.ExportVal.Clear();
             ExportProperties.ItemIdx.Clear();
-            //ExportProperties.Idx = 0;
+
+            //TERMINATES PLUG-IN AND CLOSES WINDOW
             this.Close();
         }
 
