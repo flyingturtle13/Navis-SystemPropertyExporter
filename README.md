@@ -1,5 +1,7 @@
 # Navisworks Building System Properties Exporter
-The ultimate goal of these tools and workflow is to improve MEP BIM coordination communication and federated model access with project teams.  The Navisworks add-in allows the user to select which discipline/system properties (per hierarchy level) is exported to an Excel spreadsheet for data interoperability.  The properties available to export are the same available in the "Properties" window.  The primary purpose is to send the system properties to Forge model viewer to create a 3D model metrics dashbaord to permit users to access system data, quantities, and statuses.  This workflow requires Autodesk Navisworks (Manage, Simulate, Freedom) 2019, Navisworks API to access model data for exporting and Forge model viewer.  However, this respository focuses on the Navisworks API and add-in only.
+The ultimate goal of these tools and workflow is to improve MEP BIM coordination communication and federated model access with project teams.  The Navisworks add-in allows the user to select which discipline/system properties (per hierarchy level) is exported to an Excel spreadsheet for data interoperability.  The properties available to export are the same available in the "Properties" window.  The primary purpose is to send the system properties to Forge model viewer to create a 3D model metrics dashbaord to permit users to access system data, quantities, and statuses.  This workflow requires Autodesk Navisworks (Manage, Simulate, Freedom) 2019, Navisworks API to access model data for exporting and Forge model viewer.  However, this respository focuses on the Navisworks API and add-in only. 
+</br></br>
+**Note:** This add-in application is part of the VDC Add-Ins suite of tools and currently includes Clash Data Exporter (only works with Navisworks Manage).  For more information about the Clash Data Exporter tool see [Navisworks-Clash Data Exporter](https://github.com/flyingturtle13/Navis-Clash_Data_Exporter.git) here.
 
 ## Getting Started
 Environment setup regarding application development logistics.
@@ -97,16 +99,17 @@ Below highlights specific API features implemented to access and export specific
 
 ## Installing and Running Add-in
 1. Clone or download project. </br>
-2. Open ClashData.sln in Visual Studio 2019. </br>
+2. Open SystemPropertyExporter.sln in Visual Studio 2019. </br>
+   * **Note:** SystemPropertyExporter.zip in Add-In Example Files contains example of working add-in for Navisworks 2019. Unzip and copy into **Local_Drive:\...\Autodesk\Navisworks Manage 2019\Plugins** if one would like to test without opening Visual Studio
 3. Ensure that the library packages stated in Getting Started are installed and referenced. </br>
 4. The application can then be run in debug mode. </br>
 5. Go to Debug/Release location and copy the files and folder below. </br>
    <p align = "center">
       <img src="https://user-images.githubusercontent.com/44215479/80941253-d6686c80-8d96-11ea-9c51-177ce4ddb2a9.png">
    </p>
-6. Create a ClashData folder in **Local_Drive:\...\Autodesk\Navisworks Manage 2019\Plugins** </br>
+6. Create a SystemPropertyExporter folder in **Local_Drive:\...\Autodesk\Navisworks Manage 2019\Plugins** </br>
 7. Paste copied files and folders to SystemPropertyExporter folder </br>
-   * **Note:** This application is part of the VDC Add-Ins suite, so include ClashData.dll in SystemPropertyExporter folder (included Default Files folder)
+   * **Note:** This application is part of the VDC Add-Ins suite, so include ClashData.dll in SystemPropertyExporter folder (included SystemPropertyExporterl.zip in Add-In Example Files folder)
    * **Note:** If user would like to remove Clash Data Add-In, can be modified in StartMain.cs prior to debugging and release
 8. Open Navisworks Manage 2019 (or whichever version if Autodesk references modified) to execute and test add-in.
 
