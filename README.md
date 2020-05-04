@@ -69,46 +69,74 @@ Overall add-in process flowchart.  User interface in Navisworks is included for 
 ## Navisworks API Implementation
 Below highlights specific API features implemented to access and export specific Clash Detective Data
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/44215479/80936415-f5aace00-8d85-11ea-93a1-32b978208db2.png" width="600">
+  <img src="https://user-images.githubusercontent.com/44215479/80936415-f5aace00-8d85-11ea-93a1-32b978208db2.png" width="700">
 </p>
 
-##### Hierarchy Level Mapping Visual with Selection Tree
+##### Hierarchy Level Mapping Visual Using Selection Tree
 - How API is mapped to model files in Selection Tree UI
   - Model files exported from Revit
     <p align="center">
-     <img src="https://user-images.githubusercontent.com/44215479/80939455-88049f00-8d91-11ea-997d-afbf994902b7.png" width="600">
+     <img src="https://user-images.githubusercontent.com/44215479/80939455-88049f00-8d91-11ea-997d-afbf994902b7.png" width="700">
     </p>
   - Model files exported from AutoCAD
     <p align="center">
-     <img src="https://user-images.githubusercontent.com/44215479/80939489-a79bc780-8d91-11ea-8a75-d36d85c60939.png" width="600">
+     <img src="https://user-images.githubusercontent.com/44215479/80939489-a79bc780-8d91-11ea-8a75-d36d85c60939.png" width="700">
     </p>
 
-##### Output Excel Spreadsheet Examples
-- Export from Clash Test module
+##### Model Categories and Properties Mapping Visual Using Properties Window
+- How API is mapped to model files to retrieve available categories and properties for export
+  <p align="center">
+     <img src="https://user-images.githubusercontent.com/44215479/80939719-5cce7f80-8d92-11ea-801b-4a4c7946e9fa.png" width="650">
+  </p>
+
+##### Output Excel Spreadsheet Example
+- Export Excel file example based on user input mapping API classes and properties
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/44215479/75585249-77991680-5a26-11ea-9e63-43ed83651cb1.png" width="1000">
+  <img src="https://user-images.githubusercontent.com/44215479/80940869-c603c200-8d95-11ea-9afa-f5bf6e7fdc97.png" width="1000">
 </p>
 
-- Export from Total Objects by Discipline module
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/44215479/75585302-9ac3c600-5a26-11ea-950d-f41adfa4aa90.png" width="400">
-</p>
-
-## Installing and Running Application
+## Installing and Running Add-in
 1. Clone or download project. </br>
 2. Open ClashData.sln in Visual Studio 2019. </br>
 3. Ensure that the library packages stated in Getting Started are installed and referenced. </br>
 4. The application can then be run in debug mode. </br>
 5. Go to Debug/Release location and copy the files and folder below. </br>
    <p align = "center">
-      <img src="https://user-images.githubusercontent.com/44215479/75586032-50434900-5a28-11ea-9cb2-8e3d00008d17.png" width = "200">
+      <img src="https://user-images.githubusercontent.com/44215479/80941253-d6686c80-8d96-11ea-9c51-177ce4ddb2a9.png">
    </p>
 6. Create a ClashData folder in **Local_Drive:\...\Autodesk\Navisworks Manage 2019\Plugins** </br>
-7. Paste copied files and folders to ClashData folder </br>
-8. Open Navisworks Manage 2019 to execute and test add-in.
+7. Paste copied files and folders to SystemPropertyExporter folder </br>
+   * **Note:** This application is part of the VDC Add-Ins suite, so include ClashData.dll in SystemPropertyExporter folder (included Default Files folder)
+   * **Note:** If user would like to remove Clash Data Add-In, can be modified in StartMain.cs prior to debugging and release
+8. Open Navisworks Manage 2019 (or whichever version if Autodesk references modified) to execute and test add-in.
 
+## Add-In Implementation User Instructions
+1. Select System Property Exporter (In reibbon: VDC Add-Ins --> Export Tools --> System Property Exporter) 
+   <p align = "center">
+      <img src="https://user-images.githubusercontent.com/44215479/80942187-06b10a80-8d99-11ea-903e-dae92a6e841a.png" width="600">
+   </p>
+2. User to input or make selections to export desired system properties. See below for a discription of each feature is described below.
+   <p align = "center">
+      <img src="https://user-images.githubusercontent.com/44215479/80942605-0bc28980-8d9a-11ea-8c1c-834d1598e54d.png" width="800">
+   </p>
+   1. User to input name of building system and discipline organization code. </br>
+   2. Select associated model file from drop-down list. </br>
+   3. Select at which system level of information to export. Typically, System Individual Components is selected to get the most detail of each system element. </br>
+   4. User to select which Category in the list properties and values will be exported. </br>
+   5. An preview of what kind of available properties and values are displayed. </br>
+   6. Add button will include in queue of properties to be exported. </br>
+   7. Reset button will clear user modifications. </br>
+   8. The list previews all user items to be exported (based on user selecting the Add button) seen in Selected Models & Properties to Export. </br>
+   9. Remove button will remove any items seleted in the list in (8). </br>
+   10. Save List button allows the user to save the list (.TXT format) that has been created in (8) for future automated population. </br>
+   11. Load List button allows the user to load a previously saved list. </br>
+   12. OK button executes items in Selected Models & Properties Export list to be recorded to an Excel spreadsheet. </br>
+       * User will be prompted where to save when complete </br>
+       * Application will automatically close when complete </br>
+   13. Cancel button will close application without exporting any system properties.
+   
 ## References for Further Learning
 - [Customizing Autodesk® Navisworks® 2013 with the .NET API - Simon Bee](https://www.autodesk.com/autodesk-university/class/Customizing-AutodeskR-NavisworksR-2013-NET-API-2012)
-- [Navisworks .NET API 2013 new feature – Clash 2 - Xiaodong Liang](https://adndevblog.typepad.com/aec/2012/05/navisworks-net-api-2013-new-feature-clash-2.html)
+- [Navisworks .NET API Properties - Xiaodong Liang](https://adndevblog.typepad.com/aec/2012/05/navisworks-net-api-properties.html)
 - [API Docs - Guilherme Talarico](https://apidocs.co/apps/navisworks/2018/87317537-2911-4c08-b492-6496c82b3ed1.htm#)
 
