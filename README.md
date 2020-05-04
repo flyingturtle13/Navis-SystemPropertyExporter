@@ -63,13 +63,13 @@ Application features and specs for Navisworks Manage add-in
 ## Application Structure
 Overall add-in process flowchart.  User interface in Navisworks is included for reference.
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/44215479/80935951-e62a8580-8d83-11ea-81fc-684c72e18df2.png" width="1000">
+  <img src="https://user-images.githubusercontent.com/44215479/80936145-aca64a00-8d84-11ea-84ee-448722c0288b.png" width="1000">
 </p>
        
 ## Navisworks API Implementation
 Below highlights specific API features implemented to access and export specific Clash Detective Data
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/44215479/75583929-7ca89680-5a23-11ea-99a4-8d49d07a47e4.png" width="600">
+  <img src="https://user-images.githubusercontent.com/44215479/80936415-f5aace00-8d85-11ea-93a1-32b978208db2.png" width="600">
 </p>
 
 ##### Total Objects By Discipline Module
