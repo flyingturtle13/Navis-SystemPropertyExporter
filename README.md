@@ -119,21 +119,21 @@ Below highlights specific API features implemented to access and export specific
    <p align = "center">
       <img src="https://user-images.githubusercontent.com/44215479/80942605-0bc28980-8d9a-11ea-8c1c-834d1598e54d.png" width="800">
    </p></br>
- 1. User to input name of building system and discipline organization code.
- 2. Select associated model file from drop-down list.
- 3. Select at which system level of information to export. Typically, System Individual Components is selected to get the most detail of each system element.
- 4. User to select which Category in the list properties and values will be exported.
- 5. An preview of what kind of available properties and values are displayed.
- 6. Add button will include in queue of properties to be exported.
- 7. Reset button will clear user modifications.
- 8. The list previews all user items to be exported (based on user selecting the Add button) seen in Selected Models & Properties to Export.
- 9. Remove button will remove any items seleted in the list in (8.). </br>
- 10. Save List button allows the user to save the list (.TXT format) that has been created in (8.) for future automated population. 
- 11. Load List button allows the user to load a previously saved list.
- 12. OK button executes items in Selected Models & Properties Export list to be recorded to an Excel spreadsheet.
-     * User will be prompted where to save when complete
-     * Application will automatically close when complete
- 13. Cancel button will close application without exporting any system properties.
+ * (1) User to input name of building system and discipline organization code.
+ * (2) Select associated model file from drop-down list.
+ * (3) Select at which system level of information to export. Typically, System Individual Components is selected to get the most detail of each system element.
+ * (4) User to select which Category in the list properties and values will be exported.
+ * (5) An preview of what kind of available properties and values are displayed.
+ * (6) Add button will include in queue of properties to be exported.
+ * (7) Reset button will clear user modifications.
+ * (8) The list previews all user items to be exported (based on user selecting the Add button) seen in Selected Models & Properties to Export.
+ * (9) Remove button will remove any items seleted in the list in (8). </br>
+ * (10) Save List button allows the user to save the list (.TXT format) that has been created in (8) for future automated population. 
+ * (11) Load List button allows the user to load a previously saved list.
+ * (12) OK button executes items in Selected Models & Properties Export list to be recorded to an Excel spreadsheet.
+   - User will be prompted where to save when complete
+   - Application will automatically close when complete
+ * (13) Cancel button will close application without exporting any system properties.
    
 3) Working UI example
    <p align = "center">
