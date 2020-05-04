@@ -30,70 +30,47 @@ Application features and specs for Navisworks Manage add-in
 
 * Software Required
   - Navisworks 2019 (Manage, Simulate, Freedom)
-  
-* Navisworks Model Preparation & Clash Detective Setup Requirements
-  - Models appended need to be solids (not polymesh)
-  - Consistent model file naming convention
-  - Defined Focus Zones
-  - Active Grid System must be set to Grid System that includes boundaries of Floor Plan used in Reports
-  - Setup rules for clash tests to eliminate false positives
-  - Cannot Compact Clashes
-  - Always Update "All Clash"
+    * If other version desired, replace Autodesk library packages with Navisworks version desired in Visual Studio. 
+    
+* Navisworks Model Building System Properties Accessed
+  - Parameters being exported can be seen by viewing the Selection Tree window and Properties window.
+  - Hierarchy Levels 
+    * Discipline System - File icon
+    * System Parts - Layer icon (exported from AutoCAD) or Collection icon (exported from Revit)
+    * Individual Components - Block icon or Geometry icon (directly sub item to a Layer)
+  - Navisworks Selection Tree - Models Exported from Revit
+    <p align="center">
+     <img src="https://user-images.githubusercontent.com/44215479/80930464-99858100-8d68-11ea-9de0-32a8c4be8fb6.png" width="250">
+    </p>
+  - Navisworks Selection Tree - Models Exported from AutoCAD
+    <p align="center">
+     <img src="https://user-images.githubusercontent.com/44215479/80930540-0e58bb00-8d69-11ea-96e8-ad4ee28e3b59.png" width="250">
+    </p>
+  - Navisworks Properties Window
+    <p align="center">
+     <img src="https://user-images.githubusercontent.com/44215479/80930589-6099dc00-8d69-11ea-836d-4c50385cb416.png" width="300">
+    </p>
 
 * User Interface
-  - User to specify focus zone for data being exported
-  - User to specify project disciplines (ability to save project discipline list and be loaded for future exports)
-  - User to specify repository location for data output (Excel file type) to be saved
+  - User to input Discipline / Building System
+  - User to select associated model (similar to what is seen in the Selection Tree)
+  - User to select model hierarchy level to export (entire system, system parts, individual components)
+  - User to select which Property Category to export parameters
+  - Creates a viewable list of property categories per discipline to be exported
+  - User has ability to save and load a list of discipline property categories to export to eliminate list creation every time export is needed
+  - Exported parameters are stored in an Excel file that the user can choose save location
 
 ## Application Structure
-Overall workflow from Navisworks Manage to Power BI
-> [Navisworks Workflow Video](https://youtu.be/ksFMhAtj59k)
+Overall add-in process flowchart.  User interface in Navisworks is included for reference.
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/44215479/75582505-91cff600-5a20-11ea-92b7-44ee63b8cf38.png" width="1000">
+  <img src="https://user-images.githubusercontent.com/44215479/80930142-63470200-8d66-11ea-836a-64439e02f72d.png" width="1000">
 </p>
-
-1. The Clash Data Exporter add-in has two modules: </br>
-  - Clash Test - Exports specific Clash Detective data and writes in Excel spreadsheet
-  - Total Objects by Discipline - Exports total objects in open model by discipline for producing metrics in Excel spreadsheet</br>
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/44215479/75580936-70b9d600-5a1d-11ea-82eb-315ec8ec78f4.png" width="300">
-</p>
-
-2. User prompted to specify focus zone associated with exported data and project disciplines 
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/44215479/75582807-3c481900-5a21-11ea-8609-8b1173f09d06.png" width="600">
-</p>
-
-3.  Power BI Reports</br>
-    - Projects are created using a template: Project_Name-Clash_Matrics_Template_V2.pbit </br>
-      - Create new project using template: **File --> Import --> Power BI template**
-    - Select exported Clash Data location generated from the add-in for ClashData and TotalObjects parameters
-      <p align="center">
-          <img src="https://user-images.githubusercontent.com/44215479/75591045-98b43400-5a33-11ea-87d6-74a46c66b4a7.png" width="600">
-      </p>
-    - Videos links to examples of the Power BI report functionality
-       > - [Project Summary Report Example](https://youtu.be/XugV3iUmORw)
-       > - [Overall Progress Report Example](https://youtu.be/sr67IXhXou0)
-       > - [Discipline Clash Progress Report Example](https://youtu.be/axuEieqbO3Q)
-       > - [Discipline Clash Details Report Example](https://youtu.be/DGS9jlB2jxk)
-       > - [Clash Map Report Example](https://youtu.be/XgPejZVefOU)
        
 ## Navisworks API Implementation
 Below highlights specific API features implemented to access and export specific Clash Detective Data
 <p align="center">
   <img src="https://user-images.githubusercontent.com/44215479/75583929-7ca89680-5a23-11ea-99a4-8d49d07a47e4.png" width="600">
 </p>
-
-##### Clash Test Module
- - How API is mapped to data in Clash Detective UI for OPEN clashes
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/44215479/75581657-cf338400-5a1e-11ea-8786-9a9ef484ad9a.png" width="600">
-</p>  
-
- - How API is mapped to data in Clash Detective UI for CLOSED clashes
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/44215479/75582011-86c89600-5a1f-11ea-9988-308d1b967523.png" width="600">
-</p> 
 
 ##### Total Objects By Discipline Module
 - How API is mapped to model files in Selection Tree UI
