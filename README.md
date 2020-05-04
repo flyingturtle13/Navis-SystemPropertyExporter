@@ -63,7 +63,7 @@ Application features and specs for Navisworks Manage add-in
 ## Application Structure
 Overall add-in process flowchart.  User interface in Navisworks is included for reference.
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/44215479/80930142-63470200-8d66-11ea-836a-64439e02f72d.png" width="1000">
+  <img src="https://user-images.githubusercontent.com/44215479/80935951-e62a8580-8d83-11ea-81fc-684c72e18df2.png" width="1000">
 </p>
        
 ## Navisworks API Implementation
