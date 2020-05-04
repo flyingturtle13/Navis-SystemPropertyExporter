@@ -1,4 +1,4 @@
-# Navisworks Building System Property Exporter
+# Navisworks Building System Properties Exporter
 The ultimate goal of these tools and workflow is to improve MEP BIM coordination communication and federated model access with project teams.  The Navisworks add-in allows the user to select which discipline/system properties (per hierarchy level) is exported to an Excel spreadsheet for data interoperability.  The properties available to export are the same available in the "Properties" window.  The primary purpose is to send the system properties to Forge model viewer to create a 3D model metrics dashbaord to permit users to access system data, quantities, and statuses.  This workflow requires Autodesk Navisworks (Manage, Simulate, Freedom) 2019, Navisworks API to access model data for exporting and Forge model viewer.  However, this respository focuses on the Navisworks API and add-in only.
 
 ## Getting Started
@@ -72,11 +72,16 @@ Below highlights specific API features implemented to access and export specific
   <img src="https://user-images.githubusercontent.com/44215479/80936415-f5aace00-8d85-11ea-93a1-32b978208db2.png" width="600">
 </p>
 
-##### Total Objects By Discipline Module
+##### Hierarchy Level Mapping Visual with Selection Tree
 - How API is mapped to model files in Selection Tree UI
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/44215479/75584908-b8446000-5a25-11ea-99ed-18e675b9782d.png" width="600">
-</p>
+  - Model files exported from Revit
+    <p align="center">
+     <img src="https://user-images.githubusercontent.com/44215479/80939455-88049f00-8d91-11ea-997d-afbf994902b7.png" width="600">
+    </p>
+  - Model files exported from AutoCAD
+    <p align="center">
+     <img src="https://user-images.githubusercontent.com/44215479/80939489-a79bc780-8d91-11ea-8a75-d36d85c60939.png" width="600">
+    </p>
 
 ##### Output Excel Spreadsheet Examples
 - Export from Clash Test module
@@ -103,10 +108,7 @@ Below highlights specific API features implemented to access and export specific
 8. Open Navisworks Manage 2019 to execute and test add-in.
 
 ## References for Further Learning
-- Tools and Workflow described here are based on AU 2019 Presentation: [Visualizing Clash Metrics in Navisworks with Power BI - Carlo Caparas](https://www.autodesk.com/autodesk-university/class/Its-All-Data-Visualizing-Clash-Metrics-Navisworks-and-Power-BI-2019)
 - [Customizing Autodesk® Navisworks® 2013 with the .NET API - Simon Bee](https://www.autodesk.com/autodesk-university/class/Customizing-AutodeskR-NavisworksR-2013-NET-API-2012)
-- [Navisworks .NET API 2013 new feature – Clash 1 - Xiaodong Liang](https://adndevblog.typepad.com/aec/2012/05/navisworks-net-api-2013-new-feature-clash-1.html)
 - [Navisworks .NET API 2013 new feature – Clash 2 - Xiaodong Liang](https://adndevblog.typepad.com/aec/2012/05/navisworks-net-api-2013-new-feature-clash-2.html)
 - [API Docs - Guilherme Talarico](https://apidocs.co/apps/navisworks/2018/87317537-2911-4c08-b492-6496c82b3ed1.htm#)
-- [Power BI Documentation - Microsoft Corporation](https://docs.microsoft.com/en-us/power-bi/#pivot=home&panel=home-all)
 
