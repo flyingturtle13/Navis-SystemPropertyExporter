@@ -130,7 +130,7 @@ namespace SystemPropertyExporter
                     
                     //SETS COLUMN TO START STORING PROPERTY + VALUE INTO CELL
                     colNum = 7;
-
+                    
                     //RETRIEVES CURRENT EXPORT ITEM INDEX NUMBER TO MATCH WITH LIST VALUE IN ItemIdx
                     int indexMatch = ExportProperties.ExportItems.IndexOf(item);
                     var currRange = PropRange(indexMatch); //GOES TO PropRange METHOD TO OBTAIN MINIMUM AND MAXIMUM INDICES
@@ -139,15 +139,50 @@ namespace SystemPropertyExporter
                     int idxMax = currRange.iMax; //RETURNS MAX. INDEX VALUE OF MATCHED EXPORT ITEM LIST INDEX FROM PropRange
 
                     //USING MIN AND MAX RETURNED VALUES, ITERATES THROUGH ExportProp and ExportVal
-                    //TO STORE DATA IN EXCEL FILE PER CURRENT EXPORT ITEM
+                    //TO STORE DATA IN EXCEL FILE PER CURRENT EXPORT ITERATION
+                    //ExportProp = Column Header, Export Val = Item Value
+                    int i = idxMin;
+
+                    while (i <= idxMax)
+                    {
+
+                        // check if column header is empty (unassigned)
+                        // create new property column and record value
+                        if (xlWorksheet.Cells[1, colNum].Value == null)
+                        {
+                            xlWorksheet.Cells[1, colNum] = ExportProperties.ExportProp[i];
+
+                            var rangeVal = (Excel.Range)xlWorksheet.Cells[rowNum, colNum];
+                            rangeVal.Value2 = ExportProperties.ExportVal[i];
+                            i++;
+                            colNum = 7;
+                        }
+                        // check if current property is pointed to same column
+                        else if (ExportProperties.ExportProp[i].ToString() == Convert.ToString(xlWorksheet.Cells[1, colNum].Value))
+                        {
+                            var rangeVal = (Excel.Range)xlWorksheet.Cells[rowNum, colNum];
+                            rangeVal.Value2 = ExportProperties.ExportVal[i];
+                            i++;
+                            colNum = 7;
+                        }
+                        // if property does not match current column header, 
+                        // increment to next column and check if ExportProp matches header
+                        // or new header needs to be created
+                        else
+                        {
+                            colNum++;
+                        }
+                    }
+
+                    /*
                     for (int i = idxMin; i <= idxMax; i++)
                     {
                         var rangeVal = (Excel.Range)xlWorksheet.Cells[rowNum, colNum];
                         rangeVal.Value2 = $"PROPERTY: {ExportProperties.ExportProp[i]}_____VALUE: {ExportProperties.ExportVal[i]}";
-                        
+
                         colNum++;
                     }
-
+                    */
                     //-------------------------------------------------------------------------------------------------------------
 
                     //SET FOR NEXT EXPORT ITEM 
@@ -200,7 +235,7 @@ namespace SystemPropertyExporter
             }
             catch (Exception exception)
             {
-                MessageBox.Show("Error! Check if clash test(s) exist or previously run.  Original Message: " + exception.Message);
+                MessageBox.Show("Error Writing in Excel File!  Original Message: " + exception.Message);
             }
         }
 
