@@ -77,7 +77,7 @@ namespace SystemPropertyExporter
 
         //-----------------------------------------------------------------------------------------------------------
         
-
+        //MAIN CLASS METHOD TO PROCESS USER SELECTED MODELS FOR DATA EXPORT
         public static void ProcessModelsSelected()
         {
             foreach (Selected item in UserItems)
@@ -121,13 +121,14 @@ namespace SystemPropertyExporter
                 }
                 catch(Exception exception)
                 {
-                    MessageBox.Show("Error! Original Message: " + exception.Message);
+                    MessageBox.Show("Error Storing Model Info for Export! Original Message: " + exception.Message);
                 }
             }
 
             //DIRECT TO WriteToExcel CLASS 
             //- EXPORT DESIRED PROPERTIES AND VALUES
             WriteToExcel.ExcelReport();
+            //WriteToTxt.txtReport();
         }
 
 

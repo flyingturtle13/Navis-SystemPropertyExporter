@@ -1,0 +1,166 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+using System.Runtime.InteropServices;
+using System.Reflection;
+using Excel = Microsoft.Office.Interop.Excel;
+using System.Windows;
+using Microsoft.Win32;
+using Autodesk.Navisworks.Api;
+using Autodesk.Navisworks.Api.DocumentParts;
+using Autodesk.Navisworks.Api.Clash;
+using Autodesk.Navisworks.Internal.ApiImplementation;
+using Autodesk.Navisworks.Api.Automation;
+using Autodesk.Navisworks.Api.Plugins;
+using System.Collections.ObjectModel;
+using SystemPropertyExporter;
+
+namespace SystemPropertyExporter
+{
+    class WriteToTxt
+    {
+        //REQUIRED TO BE GLOBAL PARAMETER SO A RUNNING TOTAL CAN BE KEPT
+        //PREVENTS HAVING TO CYCLE THROUGH ENTIRE 0 BASED ItemIdx List in RangeProp METHOD
+        public static int IdxCounter { get; set; }
+
+
+        public static void txtReport()
+        {
+
+            List<string> header = new List<string>();
+
+            try
+            {
+                //CREATES NEW VARIABLE INSTANCE - ALLOWS TO OPEN WINDOWS EXPLORER SAVE FILE PROMPT
+                string filename = "";
+                SaveFileDialog saveList = new SaveFileDialog();
+
+                //SETS FILE TYPE TO BE SAVED AS .TXT
+                saveList.Title = "Save to...";
+                saveList.Filter = "Text Documents | *.txt";
+
+                //OPENS WINDOWS EXPLORER TO BEGIN LIST SAVE PROCESS
+                if (saveList.ShowDialog() == true)
+                {
+                    filename = saveList.FileName.ToString();
+
+                    //CHECKS USER HAS INPUTED A NAME FOR THE FILE
+                    if (filename != "")
+                    {
+                        using (StreamWriter sw = new StreamWriter(filename))
+                        {
+                            //POPULATES TXT FILE WITH LIST ITEMS SEPARATED BY "--" USING StreamWriter & CLOSES WHEN COMPLETE
+                            header.Add("Discipline");
+                            header.Add("Model File Name");
+                            header.Add("Hierarchy Level");
+                            header.Add("Category");
+                            header.Add("Elemenet Name");
+                            header.Add("Element GUID");
+
+                            foreach (Export item in ExportProperties.ExportItems)
+                            {
+                                sw.Write(item.ExpDiscipline);
+                                sw.Write(", " + item.ExpModFile);
+                                sw.Write(", " + item.ExpHierLvl);
+                                sw.Write(", " + item.ExpCategory);
+                                sw.Write(", " + item.ItemName);
+                                sw.Write(", " + item.ExpGuid);
+
+                                //RETRIEVES CURRENT EXPORT ITEM INDEX NUMBER TO MATCH WITH LIST VALUE IN ItemIdx
+                                int indexMatch = ExportProperties.ExportItems.IndexOf(item);
+                                var currRange = PropRange(indexMatch); //GOES TO PropRange METHOD TO OBTAIN MINIMUM AND MAXIMUM INDICES
+                                                                       //OF MATCHING INDEX NUMBER
+                                int idxMin = currRange.iMin; //RETURNS MIN. INDEX VALUE OF MATCHED EXPORT ITEM LIST INDEX FROM PropRange
+                                int idxMax = currRange.iMax; //RETURNS MAX. INDEX VALUE OF MATCHED EXPORT ITEM LIST INDEX FROM PropRange
+
+                                int i = idxMin;
+
+                                while (i <= idxMax)
+                                {
+                                    sw.Write(", " + ExportProperties.ExportVal[i].ToString());
+                                    /*
+                                    // check if column header is empty (unassigned)
+                                    // create new property column and record value
+                                    if (xlWorksheet.Cells[1, colNum].Value == null)
+                                    {
+                                        header.Add(ExportProperties.ExportProp[i].ToString());
+
+                                        sw.Write(", " + ExportProperties.ExportVal[i].ToString());
+
+                                        i++;
+                                        colNum = 7;
+                                    }
+                                    // check if current property is pointed to same column
+                                    else if (ExportProperties.ExportProp[i].ToString() == Convert.ToString(xlWorksheet.Cells[1, colNum].Value))
+                                    {
+                                        sw.Write(", " + ExportProperties.ExportVal[i].ToString());
+
+                                        i++;
+                                        colNum = 7;
+                                    }
+                                    // if property does not match current column header, 
+                                    // increment to next column and check if ExportProp matches header
+                                    // or new header needs to be created
+                                    else
+                                    {
+                                        colNum++;
+                                    }
+                                    */
+                                }
+                                sw.WriteLine("");
+                            }
+                            sw.Dispose();
+                            sw.Close();
+                        }
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show("Error Writing in Txt File!  Original Message: " + exception.Message);
+            }
+        }
+
+
+        //METHOD TO RETURN MINIMUM AND MAXIMUM INDICES IN ExportProp & ExportVal 
+        //OF MATCHING CURRENT EXPORT ITEM INDEX NUMBER in ExportItems List
+        private static (int iMin, int iMax) PropRange(int indexMatch)
+        {
+            //CONSTANTS ASSIGNMENT
+            int iMin = -1;
+            int iMax = -1;
+            bool firstMatch = true;
+
+            //ITERATES OVER ItemIdx LIST.
+            //IdxCounter KEEPS A RUNNING TOTAL SO DOES NOT HAVE TO START
+            //FROM BEGINNING OF 0 BASED LIST...PICKS UP FROM LAST EXPORT ITEM MATCHING INDEX
+            for (int i = IdxCounter; i < ExportProperties.ItemIdx.Count; i++)
+            {
+                //indexMatch (CURRENT EXPORT ITEM INDEX NUMBER) TO MATCH WITH LIST VALUE IN ItemIdx
+                if (indexMatch == ExportProperties.ItemIdx[i])
+                {
+                    if (firstMatch == true)
+                    {
+                        iMin = i;
+                        iMax = i;
+                        firstMatch = false;
+                    }
+                    else
+                    {
+                        //MAXIMUM VALUE UPDATED TILL NO MORE MATCHING
+                        if (i > iMax)
+                        {
+                            iMax = i;
+                            IdxCounter = i;
+                        }
+                    }
+                }
+            }
+
+            return (iMin, iMax);
+        }
+    }
+}

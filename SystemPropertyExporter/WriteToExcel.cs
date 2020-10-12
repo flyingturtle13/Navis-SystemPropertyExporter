@@ -24,7 +24,7 @@ namespace SystemPropertyExporter
         //PREVENTS HAVING TO CYCLE THROUGH ENTIRE 0 BASED ItemIdx List in RangeProp METHOD
         public static int IdxCounter { get; set; }
 
-        //tRANSFERS ExportItems TO EXCEL FILE FOR USER PURPOSES
+        //TRANSFERS ExportItems TO EXCEL FILE FOR USER PURPOSES
         public static void ExcelReport()
         {
             try

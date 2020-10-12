@@ -99,6 +99,7 @@
       <DependentUpon>UserInput.xaml</DependentUpon>
     </Compile>
     <Compile Include="WriteToExcel.cs" />
+    <Compile Include="WriteToTxt.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AddinRibbon.xaml">
