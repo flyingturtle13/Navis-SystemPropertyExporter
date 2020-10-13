@@ -24,7 +24,7 @@ namespace SystemPropertyExporter
     {
         //REQUIRED TO BE GLOBAL PARAMETER SO A RUNNING TOTAL CAN BE KEPT
         //PREVENTS HAVING TO CYCLE THROUGH ENTIRE 0 BASED ItemIdx List in RangeProp METHOD
-        public static int IdxCounter { get; set; }
+        public static int TxtIdxCounter { get; set; }
 
 
         public static void txtReport()
@@ -34,19 +34,39 @@ namespace SystemPropertyExporter
 
             try
             {
+                TxtIdxCounter = 0;
+                //GETS CURRENT DATE AND FORMATS FOR DEFAULT FILE NAME
+                string exportYr = DateTime.Now.Year.ToString();
+                string exportMonth = DateTime.Now.Month.ToString();
+                string exportDay = DateTime.Now.Day.ToString();
+
+                if (exportMonth.Length == 1)
+                {
+                    exportMonth = "0" + exportMonth;
+                }
+
+                if (exportDay.Length == 1)
+                {
+                    exportDay = "0" + exportDay;
+                }
+
+                string exportDate = exportYr + exportMonth + exportDay;
+
                 //CREATES NEW VARIABLE INSTANCE - ALLOWS TO OPEN WINDOWS EXPLORER SAVE FILE PROMPT
                 string filename = "";
-                SaveFileDialog saveList = new SaveFileDialog();
+                SaveFileDialog saveExportData = new SaveFileDialog();
 
                 //SETS FILE TYPE TO BE SAVED AS .TXT
-                saveList.Title = "Save to...";
-                saveList.Filter = "Text Documents | *.txt";
+                saveExportData.Title = "Save to...";
+                saveExportData.Filter = "Text Documents | *.txt";
+                saveExportData.FileName = exportDate + "-System_Property_Data";
 
                 //OPENS WINDOWS EXPLORER TO BEGIN LIST SAVE PROCESS
-                if (saveList.ShowDialog() == true)
+                if (saveExportData.ShowDialog() == true)
                 {
-                    filename = saveList.FileName.ToString();
-
+                    filename = saveExportData.FileName.ToString();
+                    string savePath = $"{Path.GetDirectoryName(filename)}\\";
+                   
                     //CHECKS USER HAS INPUTED A NAME FOR THE FILE
                     if (filename != "")
                     {
@@ -63,11 +83,11 @@ namespace SystemPropertyExporter
                             foreach (Export item in ExportProperties.ExportItems)
                             {
                                 sw.Write(item.ExpDiscipline);
-                                sw.Write(", " + item.ExpModFile);
-                                sw.Write(", " + item.ExpHierLvl);
-                                sw.Write(", " + item.ExpCategory);
-                                sw.Write(", " + item.ItemName);
-                                sw.Write(", " + item.ExpGuid);
+                                sw.Write("^ " + item.ExpModFile);
+                                sw.Write("^ " + item.ExpHierLvl);
+                                sw.Write("^ " + item.ExpCategory);
+                                sw.Write("^ " + item.ItemName);
+                                sw.Write("^ " + item.ExpGuid);
 
                                 //RETRIEVES CURRENT EXPORT ITEM INDEX NUMBER TO MATCH WITH LIST VALUE IN ItemIdx
                                 int indexMatch = ExportProperties.ExportItems.IndexOf(item);
@@ -77,43 +97,63 @@ namespace SystemPropertyExporter
                                 int idxMax = currRange.iMax; //RETURNS MAX. INDEX VALUE OF MATCHED EXPORT ITEM LIST INDEX FROM PropRange
 
                                 int i = idxMin;
-
+                                int colNum = 6;
+                                //MessageBox.Show(i.ToString());
                                 while (i <= idxMax)
                                 {
-                                    sw.Write(", " + ExportProperties.ExportVal[i].ToString());
-                                    /*
                                     // check if column header is empty (unassigned)
                                     // create new property column and record value
-                                    if (xlWorksheet.Cells[1, colNum].Value == null)
+                                    if (colNum >= header.Count)
                                     {
                                         header.Add(ExportProperties.ExportProp[i].ToString());
+                                        sw.Write("^ " + ExportProperties.ExportVal[i].ToString());
 
-                                        sw.Write(", " + ExportProperties.ExportVal[i].ToString());
-
-                                        i++;
-                                        colNum = 7;
+                                        i++;                                    
                                     }
                                     // check if current property is pointed to same column
-                                    else if (ExportProperties.ExportProp[i].ToString() == Convert.ToString(xlWorksheet.Cells[1, colNum].Value))
+                                    else if (ExportProperties.ExportProp[i].ToString() == header[colNum].ToString())
                                     {
-                                        sw.Write(", " + ExportProperties.ExportVal[i].ToString());
+                                        sw.Write("^ " + ExportProperties.ExportVal[i].ToString());
 
                                         i++;
-                                        colNum = 7;
                                     }
                                     // if property does not match current column header, 
                                     // increment to next column and check if ExportProp matches header
                                     // or new header needs to be created
                                     else
                                     {
-                                        colNum++;
+                                        sw.Write("^ null");
                                     }
-                                    */
+
+                                    colNum++;
+
                                 }
                                 sw.WriteLine("");
                             }
                             sw.Dispose();
                             sw.Close();
+                        }
+
+                        
+                        //SETS FILE TYPE TO BE SAVED AS .TXT FOR COLUMN HEADERS
+                        filename = exportDate + "-System_Property_Headers.txt";
+
+                        using (StreamWriter swHeader = new StreamWriter(savePath + filename))
+                        {
+                            foreach (string title in header)
+                            {
+                                if (header.IndexOf(title) == 0)
+                                {
+                                    swHeader.Write(title.ToString());
+                                }
+                                else
+                                {
+                                    swHeader.Write("^ " + title.ToString());
+                                }
+                            }
+
+                            swHeader.Dispose();
+                            swHeader.Close();
                         }
                     }
                 }
@@ -137,7 +177,7 @@ namespace SystemPropertyExporter
             //ITERATES OVER ItemIdx LIST.
             //IdxCounter KEEPS A RUNNING TOTAL SO DOES NOT HAVE TO START
             //FROM BEGINNING OF 0 BASED LIST...PICKS UP FROM LAST EXPORT ITEM MATCHING INDEX
-            for (int i = IdxCounter; i < ExportProperties.ItemIdx.Count; i++)
+            for (int i = TxtIdxCounter; i < ExportProperties.ItemIdx.Count; i++)
             {
                 //indexMatch (CURRENT EXPORT ITEM INDEX NUMBER) TO MATCH WITH LIST VALUE IN ItemIdx
                 if (indexMatch == ExportProperties.ItemIdx[i])
@@ -154,7 +194,7 @@ namespace SystemPropertyExporter
                         if (i > iMax)
                         {
                             iMax = i;
-                            IdxCounter = i;
+                            TxtIdxCounter = i;
                         }
                     }
                 }

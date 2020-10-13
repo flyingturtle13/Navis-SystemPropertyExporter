@@ -22,7 +22,7 @@ namespace SystemPropertyExporter
     {
         //REQUIRED TO BE GLOBAL PARAMETER SO A RUNNING TOTAL CAN BE KEPT
         //PREVENTS HAVING TO CYCLE THROUGH ENTIRE 0 BASED ItemIdx List in RangeProp METHOD
-        public static int IdxCounter { get; set; }
+        public static int ExcelIdxCounter { get; set; }
 
         //TRANSFERS ExportItems TO EXCEL FILE FOR USER PURPOSES
         public static void ExcelReport()
@@ -47,7 +47,7 @@ namespace SystemPropertyExporter
                 int rowNum = 2;
                 int colNum = 7 ;
                 int modelIdx = 0;
-                IdxCounter = 0;
+                ExcelIdxCounter = 0;
                 bool match = false;
 
                 //-----------------------------------------------------------------------------------------------------
@@ -252,7 +252,7 @@ namespace SystemPropertyExporter
             //ITERATES OVER ItemIdx LIST.
             //IdxCounter KEEPS A RUNNING TOTAL SO DOES NOT HAVE TO START
             //FROM BEGINNING OF 0 BASED LIST...PICKS UP FROM LAST EXPORT ITEM MATCHING INDEX
-            for (int i = IdxCounter; i < ExportProperties.ItemIdx.Count; i++)
+            for (int i = ExcelIdxCounter; i < ExportProperties.ItemIdx.Count; i++)
             {
                     //indexMatch (CURRENT EXPORT ITEM INDEX NUMBER) TO MATCH WITH LIST VALUE IN ItemIdx
                     if (indexMatch == ExportProperties.ItemIdx[i])
@@ -269,7 +269,7 @@ namespace SystemPropertyExporter
                             if (i > iMax)
                             {
                                 iMax = i;
-                                IdxCounter = i;
+                                ExcelIdxCounter = i;
                             }
                         }
                     }

@@ -127,8 +127,8 @@ namespace SystemPropertyExporter
 
             //DIRECT TO WriteToExcel CLASS 
             //- EXPORT DESIRED PROPERTIES AND VALUES
-            WriteToExcel.ExcelReport();
-            //WriteToTxt.txtReport();
+            //WriteToExcel.ExcelReport();
+            WriteToTxt.txtReport();
         }
 
 
