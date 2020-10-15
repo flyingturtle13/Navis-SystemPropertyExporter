@@ -64,8 +64,9 @@
     <Reference Include="Autodesk.Navisworks.Clash">
       <HintPath>D:\Program Files\Autodesk\Navisworks Manage 2019\Autodesk.Navisworks.Clash.dll</HintPath>
     </Reference>
-    <Reference Include="ClashData">
-      <HintPath>D:\Program Files\Autodesk\Navisworks Manage 2019\Plugins\ClashData\ClashData.dll</HintPath>
+    <Reference Include="ClashData, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\Program Files\Autodesk\Navisworks Manage 2019\Plugins\SystemPropertyExporter\ClashData.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

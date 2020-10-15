@@ -232,8 +232,15 @@ namespace SystemPropertyExporter
                             {
                                 //SETS CURRENT MODEL ITEM REQUIRED PROPERTIES FOR EXPORT
                                 //AND PASSES TO NEXT METHOD
+                                if (subItem1.DisplayName == "")
+                                {
+                                    CurrEleName = subItem1.ClassDisplayName;
+                                }
+                                else
+                                {
+                                    CurrEleName = subItem1.DisplayName;
+                                }
                                 CurrExportCat = UserExportCat;
-                                CurrEleName = subItem1.DisplayName;
                                 CurrGuid = subItem1.InstanceGuid.ToString();
                                 CategoryTypes_NullCheck(subItem1, CurrDis, CurrModelFile, CurrExportCat, CurrEleName, CurrGuid, CurrExportLvl);
                             }
@@ -244,8 +251,18 @@ namespace SystemPropertyExporter
                             {
                                 //SETS CURRENT MODEL ITEM REQUIRED PROPERTIES FOR EXPORT
                                 //AND PASSES TO NEXT METHOD
+
+                                //MessageBox.Show(subItem1.DisplayName);
+                                //MessageBox.Show(subItem1.ClassDisplayName);
+                                if (subItem1.DisplayName == "")
+                                {
+                                    CurrEleName = subItem1.ClassDisplayName;
+                                }
+                                else
+                                {
+                                    CurrEleName = subItem1.DisplayName;
+                                }
                                 CurrExportCat = UserExportCat;
-                                CurrEleName = subItem1.DisplayName;
                                 CurrGuid = subItem1.InstanceGuid.ToString();
                                 CategoryTypes_NullCheck(subItem1, CurrDis, CurrModelFile, CurrExportCat, CurrEleName, CurrGuid, CurrExportLvl);
                             }
@@ -272,6 +289,12 @@ namespace SystemPropertyExporter
                 catAvailable.Add(oPC.DisplayName, oPC);
             }
 
+            //MessageBox.Show(CurrEleName);
+            //foreach (KeyValuePair<string, PropertyCategory> kvp in catAvailable)
+            //{
+            //    MessageBox.Show(kvp.Key);
+            //}
+
             //CHECK FOR ELEMENT NAME IS BLANK
             if (CurrEleName == "")
             {
@@ -284,7 +307,7 @@ namespace SystemPropertyExporter
             else
             {
                 //IN CASE WHEN ELEMENT NAME IS NOT EMPTY, PROCEED TO CategoryTypes_Export TO RETRIEVE USER SELECTED CATEGORY
-                CategoryTypes_Export(subItem, CurrDis, CurrModelFile, CurrExportCat, CurrEleName, CurrGuid, CurrExportLvl);
+                CategoryTypes_Export(catAvailable, CurrDis, CurrModelFile, CurrExportCat, CurrEleName, CurrGuid, CurrExportLvl);
             }
         }
 
@@ -331,22 +354,31 @@ namespace SystemPropertyExporter
 
 
         //ROUTED TO ACCESS MODEL ITEM ASSOCIATED CATEGORY TYPES AFTER HIEARCHY LEVEL DETAIL(classType) MATCHED
-        private static void CategoryTypes_Export(ModelItem subItem, string CurrDis, string CurrModelFile, string CurrExportCat, string CurrEleName, string CurrGuid, string CurrExportLvl)
+        private static void CategoryTypes_Export(Dictionary<string, PropertyCategory> catAvailable, string CurrDis, string CurrModelFile, string CurrExportCat, string CurrEleName, string CurrGuid, string CurrExportLvl)
         {
-            Dictionary<string, PropertyCategory> catAvailable = new Dictionary<string, PropertyCategory>();
+            //Dictionary<string, PropertyCategory> catAvailable = new Dictionary<string, PropertyCategory>();
 
             //CREATE DICTIONARY OF CATEGORY OF CLASS
             //TYPE STRING AND PropertyCategory <KEY, VALUE>
-            foreach (PropertyCategory oPC in subItem.PropertyCategories)
-            {
-                catAvailable.Add(oPC.DisplayName, oPC);
-            }
+            //foreach (PropertyCategory oPC in subItem.PropertyCategories)
+            //{
+            //    catAvailable.Add(oPC.DisplayName, oPC);
+            //    MessageBox.Show(oPC.DisplayName);
+            //}
+
+            //foreach (KeyValuePair<string, PropertyCategory> kvp in catAvailable)
+            //{
+            //    MessageBox.Show(kvp.Key);
+            //}
 
             //2. SEARCH IF DESIRED USER CATEGORY EXISTS FOR MODEL ITEM
             //PROCEEDS TO OBTAIN PROPERTIES OF CATEGORY
             //SPECIFIED BY USER IF MATCH FOUND
+            //MessageBox.Show(CurrExportCat.ToString());
             if (catAvailable.ContainsKey(CurrExportCat))
             {
+                //MessageBox.Show("Found");
+
                 //IF MATCH CATEGORY MATCH FOUND OF CLASS TYPE PropertyCategory, PROCEEDS TO GetProerties_Export METHOD
                 GetCatProperties_Export(catAvailable[CurrExportCat], CurrDis, CurrModelFile, CurrExportCat, CurrEleName, CurrGuid, CurrExportLvl);
                 catAvailable.Clear();
@@ -354,24 +386,24 @@ namespace SystemPropertyExporter
             //IF CATEGORY DOESN'T EXIST FOR MODEL ITEM, DEFAULT TO Item (TYPICALLY EXISTS FOR ALL MODEL ITEMS)
             else if (catAvailable.ContainsKey("Item"))
             {
-                    //ELEMENT NAME REDIRECT FOR ASSIGNMENT IF INITIAL
-                    //CATEGORY 'DisplayName' == null
-                    CurrExportCat = "Item";
+                //ELEMENT NAME REDIRECT FOR ASSIGNMENT IF INITIAL
+                //CATEGORY 'DisplayName' == null
+                CurrExportCat = "Item";
                     
-                    //PROCEED TO GetCatProperties_Export METHOD
-                    GetCatProperties_Export(catAvailable[CurrExportCat], CurrDis, CurrModelFile, CurrExportCat, CurrEleName, CurrGuid, CurrExportLvl);
-                    catAvailable.Clear();
+                //PROCEED TO GetCatProperties_Export METHOD
+                GetCatProperties_Export(catAvailable[CurrExportCat], CurrDis, CurrModelFile, CurrExportCat, CurrEleName, CurrGuid, CurrExportLvl);
+                catAvailable.Clear();
             }
             else
             {
-                    //IF MODEL ITEM HAS NOT CATEGORIES DEFAULT TO "null"
-                    //FOR PROPERTY AND VALUE AND PROCEEDS TO ExportItemSet
-                    ItemIdx.Add(Idx);
-                    ExportProp.Add("null");
-                    ExportVal.Add("null");
-                    catAvailable.Clear();
+                //IF MODEL ITEM HAS NOT CATEGORIES DEFAULT TO "null"
+                //FOR PROPERTY AND VALUE AND PROCEEDS TO ExportItemSet
+                ItemIdx.Add(Idx);
+                ExportProp.Add("null");
+                ExportVal.Add("null");
+                catAvailable.Clear();
 
-                    ExportItemsSet(CurrDis, CurrModelFile, CurrExportCat, CurrEleName, CurrGuid, CurrExportLvl);
+                ExportItemsSet(CurrDis, CurrModelFile, CurrExportCat, CurrEleName, CurrGuid, CurrExportLvl);
             }
         }
 
