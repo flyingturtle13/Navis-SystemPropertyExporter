@@ -125,10 +125,14 @@ namespace SystemPropertyExporter
                 }
             }
 
+
+            //OPEN WINDOW FOR USER TO SELECT FILE TYPE TO EXPORT TO
+            FileTypeExport uiExportType = new FileTypeExport();
+            uiExportType.ShowDialog();
             //DIRECT TO WriteToExcel CLASS 
             //- EXPORT DESIRED PROPERTIES AND VALUES
             //WriteToExcel.ExcelReport();
-            WriteToTxt.txtReport();
+            //WriteToTxt.txtReport();
         }
 
 

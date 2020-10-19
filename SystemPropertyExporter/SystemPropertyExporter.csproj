@@ -93,6 +93,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExportProperties.cs" />
+    <Compile Include="FileTypeExport.xaml.cs">
+      <DependentUpon>FileTypeExport.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GetPropertiesModel.cs" />
     <Compile Include="StartMain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -109,6 +112,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="FileTypeExport.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </Page>
     <Page Include="UserInput.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
