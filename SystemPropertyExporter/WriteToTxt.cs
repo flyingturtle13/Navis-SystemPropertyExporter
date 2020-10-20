@@ -31,6 +31,7 @@ namespace SystemPropertyExporter
         {
 
             List<string> header = new List<string>();
+            List<string> data = new List<string>();
 
             try
             {
@@ -82,12 +83,12 @@ namespace SystemPropertyExporter
 
                             foreach (Export item in ExportProperties.ExportItems)
                             {
-                                sw.Write(item.ExpDiscipline);
-                                sw.Write("^ " + item.ExpModFile);
-                                sw.Write("^ " + item.ExpHierLvl);
-                                sw.Write("^ " + item.ExpCategory);
-                                sw.Write("^ " + item.ItemName);
-                                sw.Write("^ " + item.ExpGuid);
+                                data.Add(item.ExpDiscipline);
+                                data.Add(item.ExpModFile);
+                                data.Add(item.ExpHierLvl);
+                                data.Add(item.ExpCategory);
+                                data.Add(item.ItemName);
+                                data.Add(item.ExpGuid);
 
                                 //RETRIEVES CURRENT EXPORT ITEM INDEX NUMBER TO MATCH WITH LIST VALUE IN ItemIdx
                                 int indexMatch = ExportProperties.ExportItems.IndexOf(item);
@@ -106,32 +107,60 @@ namespace SystemPropertyExporter
                                     if (colNum >= header.Count)
                                     {
                                         header.Add(ExportProperties.ExportProp[i].ToString());
-                                        sw.Write("^ " + ExportProperties.ExportVal[i].ToString());
+                                        data.Add(ExportProperties.ExportVal[i].ToString());
 
-                                        i++;                                    
+                                        i++;
+                                        colNum = 6;
                                     }
                                     // check if current property is pointed to same column
                                     else if (ExportProperties.ExportProp[i].ToString() == header[colNum].ToString())
                                     {
-                                        sw.Write("^ " + ExportProperties.ExportVal[i].ToString());
+                                        if (colNum >= data.Count)
+                                        {
+                                            data.Add(ExportProperties.ExportVal[i].ToString());
+                                        }
+                                        else
+                                        {
+                                            data[colNum] = ExportProperties.ExportVal[i].ToString();
+                                        }
 
                                         i++;
+                                        colNum = 6;
                                     }
                                     // if property does not match current column header, 
                                     // increment to next column and check if ExportProp matches header
                                     // or new header needs to be created
+                                    else if (data.Count < header.Count)
+                                    {
+                                        data.Add("null");
+                                        colNum++;
+                                    }
                                     else
                                     {
-                                        sw.Write("^ null");
+                                        colNum++;
                                     }
 
-                                    colNum++;
-
                                 }
+
+                                // Write values to text file
+                                foreach (string value in data)
+                                {
+                                    if (data.IndexOf(value) == 0)
+                                    {
+                                        sw.Write(value);
+                                    }
+                                    else
+                                    {
+                                        sw.Write("^ " + value);
+                                    }
+                                }
+
                                 sw.WriteLine("");
+                                data.Clear();
                             }
                             sw.Dispose();
                             sw.Close();
+
                         }
 
                         
