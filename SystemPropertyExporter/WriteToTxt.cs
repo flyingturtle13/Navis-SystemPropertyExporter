@@ -151,7 +151,7 @@ namespace SystemPropertyExporter
                                     }
                                     else
                                     {
-                                        sw.Write("^ " + value);
+                                        sw.Write("^" + value);
                                     }
                                 }
 
@@ -177,7 +177,7 @@ namespace SystemPropertyExporter
                                 }
                                 else
                                 {
-                                    swHeader.Write("^ " + title.ToString());
+                                    swHeader.Write("^" + title.ToString());
                                 }
                             }
 

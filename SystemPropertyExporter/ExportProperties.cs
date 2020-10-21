@@ -210,7 +210,7 @@ namespace SystemPropertyExporter
                                     if (obj.IsCollection == false)
                                     {
                                         validCollection = true;
-                                        
+
                                     }
                                 }
 
@@ -231,23 +231,45 @@ namespace SystemPropertyExporter
                             CurrExportLvl = "Individual Components";
 
                             //CHECK CONDITION IF MODEL WAS EXPORTED FROM REVIT
+                            //IN THIS CASE, CHECK IF INSERT PRECEDING IF MODEL ELEMENT IS BLOCK OR COMPOSITE
+                            if (subItem1.IsInsert == true && subItem1.Children.First.IsComposite == true)
+                            {
+                                if (subItem1.DisplayName == "")
+                                {
+                                    CurrEleName = subItem1.ClassDisplayName;
+                                    //MessageBox.Show($"2. ClassDisplayName: {CurrEleName}");
+                                }
+                                else
+                                {
+                                    CurrEleName = subItem1.DisplayName;
+                                    //MessageBox.Show($"2. ClassDisplayName: {CurrEleName}");
+                                }
+                                CurrExportCat = UserExportCat;
+                                CurrGuid = subItem1.InstanceGuid.ToString();
+                                CategoryTypes_NullCheck(subItem1, CurrDis, CurrModelFile, CurrExportCat, CurrEleName, CurrGuid, CurrExportLvl);
+                            }
+
+                            //CHECK CONDITION IF MODEL WAS EXPORTED FROM REVIT
                             //IN THIS CASE, MODEL ITEM CLASS TYPE WILL BE BLOCK OR COMPOSITE
-                            if ((subItem1.ClassDisplayName == type || subItem1.IsComposite == true) && subItem1.IsInsert == false)
+                            if ((subItem1.ClassDisplayName == type || subItem1.IsComposite == true) && subItem1.IsInsert == false && subItem1.Parent.IsInsert == false)
                             {
                                 //SETS CURRENT MODEL ITEM REQUIRED PROPERTIES FOR EXPORT
                                 //AND PASSES TO NEXT METHOD
                                 if (subItem1.DisplayName == "")
                                 {
                                     CurrEleName = subItem1.ClassDisplayName;
+                                    //MessageBox.Show($"1. ClassDisplayName: {CurrEleName}");
                                 }
                                 else
                                 {
                                     CurrEleName = subItem1.DisplayName;
+                                    //MessageBox.Show($"1. DisplayName: {CurrEleName}");
                                 }
                                 CurrExportCat = UserExportCat;
                                 CurrGuid = subItem1.InstanceGuid.ToString();
                                 CategoryTypes_NullCheck(subItem1, CurrDis, CurrModelFile, CurrExportCat, CurrEleName, CurrGuid, CurrExportLvl);
                             }
+
                             //CHECK CONDITION IF MODEL WAS EXPORTED FROM AUTOCAD
                             //IN THIS CASE, MODEL ITEM IS OF TYPE GEOMETRY DIRECT SUB TO LAYER SO CHECKS IF PARENT IS LAYER
                             //AND RULES OUT OTHER TYPES.
@@ -261,10 +283,12 @@ namespace SystemPropertyExporter
                                 if (subItem1.DisplayName == "")
                                 {
                                     CurrEleName = subItem1.ClassDisplayName;
+                                    //MessageBox.Show($"3. ClassDisplayName: {CurrEleName}");
                                 }
                                 else
                                 {
                                     CurrEleName = subItem1.DisplayName;
+                                    //MessageBox.Show($"3. ClassDisplayName: {CurrEleName}");
                                 }
                                 CurrExportCat = UserExportCat;
                                 CurrGuid = subItem1.InstanceGuid.ToString();
@@ -360,21 +384,6 @@ namespace SystemPropertyExporter
         //ROUTED TO ACCESS MODEL ITEM ASSOCIATED CATEGORY TYPES AFTER HIEARCHY LEVEL DETAIL(classType) MATCHED
         private static void CategoryTypes_Export(Dictionary<string, PropertyCategory> catAvailable, string CurrDis, string CurrModelFile, string CurrExportCat, string CurrEleName, string CurrGuid, string CurrExportLvl)
         {
-            //Dictionary<string, PropertyCategory> catAvailable = new Dictionary<string, PropertyCategory>();
-
-            //CREATE DICTIONARY OF CATEGORY OF CLASS
-            //TYPE STRING AND PropertyCategory <KEY, VALUE>
-            //foreach (PropertyCategory oPC in subItem.PropertyCategories)
-            //{
-            //    catAvailable.Add(oPC.DisplayName, oPC);
-            //    MessageBox.Show(oPC.DisplayName);
-            //}
-
-            //foreach (KeyValuePair<string, PropertyCategory> kvp in catAvailable)
-            //{
-            //    MessageBox.Show(kvp.Key);
-            //}
-
             //2. SEARCH IF DESIRED USER CATEGORY EXISTS FOR MODEL ITEM
             //PROCEEDS TO OBTAIN PROPERTIES OF CATEGORY
             //SPECIFIED BY USER IF MATCH FOUND
